@@ -1,12 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic Tac Toe Game</title>
+    <title>Tic-Tac-Toe Game</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
+
 <body>
+    <!-- Modal Overlay -->
+    <div id="overlay">
+        <div id="message">
+            <div id="close">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <div class="content"></div>
+        </div>
+    </div>
+
+    <main class="container">
+        <!-- Game Tools -->
+        <section class="tools">
+            <div class="symbols">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+                <span class="material-symbols-outlined">
+                    circle
+                </span>
+            </div>
+            <div class="turn">
+                <span class="current-turn">turn</span>
+            </div>
+            <div class="reset">
+                <div class="button">
+                    <span class="material-symbols-outlined">
+                        refresh
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Board -->
+        <section class="game-board">
+            <table>
+                <tr>
+                    <td class="cell" id="0"></td>
+                    <td class="cell" id="1"></td>
+                    <td class="cell" id="2"></td>
+                </tr>
+                <tr>
+                    <td class="cell" id="3"></td>
+                    <td class="cell" id="4"></td>
+                    <td class="cell" id="5"></td>
+                </tr>
+                <tr>
+                    <td class="cell" id="6"></td>
+                    <td class="cell" id="7"></td>
+                    <td class="cell" id="8"></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Game Stats -->
+        <aside class="stats">
+            <div class="player">
+                <label>Player 1: </label>
+                <span class="score1">0</span>
+            </div>
+            <div class="draws">
+                <label>Draws: </label>
+                <span class="draw">0</span>
+            </div>
+            <div class="player">
+                <label>Player 2: </label>
+                <span class="score2">0</span>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Endgame Message -->
+    <div class="endgame">
+        <div class="text"></div>
+    </div>
+    <button onClick="startGame()">Replay</button>
+
     <script src="script.js"></script>
 </body>
+
 </html>
