@@ -11,21 +11,8 @@
 </head>
 
 <body>
-    <!-- Modal Overlay -->
-    <div id="overlay">
-        <div id="message">
-            <div id="close">
-                <span class="material-symbols-outlined">
-                    close
-                </span>
-            </div>
-            <div class="content"></div>
-        </div>
-    </div>
-
-    <main class="container">
-        <!-- Game Tools -->
-        <section class="tools">
+    <div class="container">
+        <div class="tools">
             <div class="symbols">
                 <span class="material-symbols-outlined">
                     close
@@ -44,9 +31,9 @@
                     </span>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Game Board -->
+
         <section class="game-board">
             <table>
                 <tr>
@@ -67,7 +54,6 @@
             </table>
         </section>
 
-        <!-- Game Stats -->
         <aside class="stats">
             <div class="player">
                 <label>Player 1: </label>
@@ -82,13 +68,22 @@
                 <span class="score2">0</span>
             </div>
         </aside>
-    </main>
-
-    <!-- Endgame Message -->
-    <div class="endgame">
-        <div class="text"></div>
     </div>
+
+    <div class="endgame">
+        <div class="message">
+            <div id="close">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <div class="content">The winner is <h2>X</h2>
+            </div>
+        </div>
+    </div>
+    
     <button onClick="startGame()">Replay</button>
+
 
     <script src="script.js"></script>
 </body>
