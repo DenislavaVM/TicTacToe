@@ -13,7 +13,7 @@ body {
     background-size: cover;
     height: 100vh;
     font-family: "Roboto", Arial, Helvetica, sans-serif;
-    font-size: 1.5em;
+    font-size: 1rem; 
     color: #CCCCCC;
     overflow: hidden;
 }
@@ -37,13 +37,19 @@ body {
 .stats {
     width: 100%;
     max-width: 600px;
-    height: 10vh;
-    max-height: 100px;
+    height: auto; 
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     border-radius: 1.25rem; 
     background: linear-gradient(#4D4D4D, #1A1A1A);
+    padding: 1rem;
+    font-size: 1.5rem;
+    flex-wrap: wrap; 
+}
+
+.symbols .material-symbols-outlined {
+    font-size: 2rem;
 }
 
 .symbols .material-symbols-outlined:nth-child(odd) {
@@ -56,14 +62,15 @@ body {
 
 .difficulty-selection {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     margin-left: 15px; 
 }
 
 .difficulty-selection label {
-    margin-right: 10px;
+    margin-bottom: 5px;
     color: #FFFFFF; 
-    font-size: 1rem; 
+    font-size: 1rem;
     font-weight: 500; 
 }
 
@@ -71,7 +78,7 @@ body {
     background-color: #2E2E2E; 
     color: #FFFFFF; 
     border: 1px solid #B22222;
-    padding: 5px 10px; 
+    padding: 10px 15px; 
     border-radius: 8px; 
     font-size: 1rem; 
     cursor: pointer; 
@@ -85,6 +92,8 @@ body {
 
 .stats {
     margin-top: 1.25rem;
+    flex-wrap: wrap; 
+    font-size: 1rem;
 }
 
 tr {
@@ -113,11 +122,12 @@ tr {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 0.5rem 0;
 }
 
 label {
     font-weight: 700;
-    font-size: 0.7rem; 
+    font-size: 0.8rem;
 }
 
 .stats span {
@@ -194,9 +204,30 @@ label {
         height: 90%;
     }
 
-    .tools,
+    .tools {
+        height: auto;
+        flex-direction: column;
+        padding: 1rem 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    .symbols .material-symbols-outlined {
+        font-size: 1.8rem;
+    }
+
     .stats {
-        height: 12vh;
+        height: auto;
+        margin-top: 0.5rem;
+        flex-direction: column;
+        padding: 1rem 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    .player, .draws {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.5rem 0;
     }
 
     .cell {
@@ -216,10 +247,30 @@ label {
 }
 
 @media (max-width: 480px) {
-    .tools,
-    .stats {
-        flex-direction: column;
+    .tools {
         height: auto;
+        flex-direction: column;
+        padding: 1rem 0.5rem;
+        font-size: 1rem;
+    }
+
+    .symbols .material-symbols-outlined {
+        font-size: 1.5rem;
+    }
+
+    .stats {
+        height: auto;
+        margin-top: 0.5rem;
+        flex-direction: column;
+        padding: 1rem 0.5rem;
+        font-size: 1rem;
+    }
+
+    .player, .draws {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.5rem 0;
     }
 
     .cell {
