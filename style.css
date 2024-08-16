@@ -83,8 +83,7 @@ input[type="color"] {
     color: #1A1A1A;
 }
 
-button#start-game {
-    margin-top: 1rem;
+button {
     padding: 0.75rem 1.5rem;
     background-color: #B22222;
     color: #FFFFFF;
@@ -96,7 +95,7 @@ button#start-game {
     transition: background-color 0.3s ease;
 }
 
-button#start-game:hover {
+button:hover {
     background-color: #b26a22;
 }
 
@@ -328,7 +327,7 @@ tr {
 @media (max-width: 768px) {
     .container {
         width: 90%;
-        height: 90%;
+        height: auto; 
     }
 
     .tools {
@@ -375,6 +374,11 @@ tr {
 }
 
 @media (max-width: 480px) {
+    .container {
+        width: 95%;
+        height: auto; 
+    }
+
     .tools {
         height: auto;
         flex-direction: column;
