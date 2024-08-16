@@ -19,15 +19,26 @@
                     circle
                 </span>
             </div>
+
             <div class="turn">
                 <span class="current-turn">turn</span>
             </div>
+
             <div class="reset">
                 <div class="button">
                     <span class="material-symbols-outlined">
                         refresh
                     </span>
                 </div>
+            </div>
+
+            <div class="difficulty-selection">
+                <label for="difficulty">Choose Difficulty:</label>
+                <select id="difficulty" name="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard" selected>Hard</option>
+                </select>
             </div>
         </div>
 
@@ -81,5 +92,4 @@
 
     <script src="script.js"></script>
 </body>
-
 </html>

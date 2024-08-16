@@ -1,6 +1,6 @@
 var startingBoard;
-const playerSymbol = 'X';
-const computerSymbol = 'O';
+const playerSymbol = "X";
+const computerSymbol = "O";
 const victoryPatterns = [
     [0, 1, 2],
     [3, 4, 5],
@@ -12,23 +12,27 @@ const victoryPatterns = [
     [6, 4, 2],
 ];
 
-const cells = document.querySelectorAll('.cell');
-const resetButton = document.querySelector('.reset');
+const cells = document.querySelectorAll(".cell");
+const resetButton = document.querySelector(".reset");
 let currentPlayer = playerSymbol; 
+let difficulty = "hard";
 
-resetButton.addEventListener('click', startGame);
+resetButton.addEventListener("click", startGame);
 
 startGame();
 
 function startGame() {
-    document.querySelector('.endgame').style.display = "none";
+    const difficultySelect = document.getElementById("difficulty");
+    difficulty = difficultySelect.value;
+
+    document.querySelector(".endgame").style.display = "none";
     startingBoard = Array.from(Array(9).keys());
     currentPlayer = playerSymbol; 
     updateSymbolColors();
     for (let i = 0; i < cells.length; i++) {
-        cells[i].textContent = '';
+        cells[i].textContent = "";
         cells[i].style.removeProperty("background-color");
-        cells[i].addEventListener('click', handleTurnClick, false);
+        cells[i].addEventListener("click", handleTurnClick, false);
     }
 }
 
@@ -52,7 +56,7 @@ function handleTurnClick(square) {
 function turn(squareId, currentPlayer) {
     startingBoard[squareId] = currentPlayer;
     let symbolNode = createHTMLElementFromString(getSymbolHTML(currentPlayer));
-    document.getElementById(squareId).innerHTML = '';
+    document.getElementById(squareId).innerHTML = "";
     document.getElementById(squareId).appendChild(symbolNode);
     let gameWon = checkWin(startingBoard, currentPlayer);
     if (gameWon) {
@@ -69,7 +73,7 @@ function getSymbolHTML(currentPlayer) {
 }
 
 function createHTMLElementFromString(html) {
-    let template = document.createElement('template');
+    let template = document.createElement("template");
     template.innerHTML = html.trim();
     return template.content.firstChild;
 }
@@ -92,7 +96,7 @@ function gameOver(gameWon) {
         document.getElementById(index).style.backgroundColor = gameWon.player == playerSymbol ? "#f8dbdb" : "#b26a22";
     }
     for (let index = 0; index < cells.length; index++) {
-        cells[index].removeEventListener('click', handleTurnClick, false);
+        cells[index].removeEventListener("click", handleTurnClick, false);
     }
     declareWinner(gameWon.player == playerSymbol ? "You win!" : "You lose.", gameWon.player);
 }
@@ -111,14 +115,30 @@ function emptySquares(board) {
 }
 
 function bestSpot() {
+    if (difficulty === "easy") {
+        if (Math.random() < 0.5) {
+            return randomMove();
+        }
+    } else if (difficulty === "medium") {
+        if (Math.random() < 0.2) {
+            return randomMove();
+        }
+    }
+
     return minimax(startingBoard, computerSymbol).index;
+}
+
+function randomMove() {
+    const availableSpots = emptySquares(startingBoard);
+    const randomIndex = Math.floor(Math.random() * availableSpots.length);
+    return availableSpots[randomIndex];
 }
 
 function checkTie() {
     if (emptySquares(startingBoard).length == 0) {
         for (let index = 0; index < cells.length; index++) {
             cells[index].style.backgroundColor = "#D3D3D3"; 
-            cells[index].removeEventListener('click', handleTurnClick, false);
+            cells[index].removeEventListener("click", handleTurnClick, false);
         }
         declareWinner("Tie Game", null);
         return true;
@@ -127,7 +147,7 @@ function checkTie() {
 }
 
 function updateSymbolColors() {
-    const symbols = document.querySelectorAll('.symbols .material-symbols-outlined');
+    const symbols = document.querySelectorAll(".symbols .material-symbols-outlined");
     if (currentPlayer === playerSymbol) { 
         symbols[0].style.color = "#B22222";
         symbols[1].style.color = "#FFFFFF"; 
@@ -138,7 +158,7 @@ function updateSymbolColors() {
 }
 
 function closeEndgameMessage() {
-    document.querySelector('.endgame').style.display = 'none';
+    document.querySelector(".endgame").style.display = "none";
     startGame();
 }
 
