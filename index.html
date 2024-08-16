@@ -15,28 +15,32 @@
         <div id="home-screen" class="home-screen">
             <h1>Welcome to Tic-Tac-Toe</h1>
             <div class="customization">
-                <div class="symbol-selection">
-                    <label for="player1-symbol">Player 1 Symbol:</label>
-                    <select id="player1-symbol">
-                        <option value="X">X</option>
-                        <option value="O">O</option>
-                    </select>
-                </div>
-                <div class="color-selection">
-                    <label for="player1-color">Player 1 Color:</label>
-                    <input type="color" id="player1-color" value="#B22222">
+                <div class="player-selection">
+                    <div class="symbol-selection">
+                        <label for="player1-symbol">Player 1 Symbol:</label>
+                        <select id="player1-symbol">
+                            <option value="X">X</option>
+                            <option value="O">O</option>
+                        </select>
+                    </div>
+                    <div class="color-selection">
+                        <label for="player1-color">Player 1 Color:</label>
+                        <input type="color" id="player1-color" value="#B22222">
+                    </div>
                 </div>
 
-                <div class="symbol-selection">
-                    <label for="player2-symbol">Player 2 Symbol:</label>
-                    <select id="player2-symbol">
-                        <option value="O">O</option>
-                        <option value="X">X</option>
-                    </select>
-                </div>
-                <div class="color-selection">
-                    <label for="player2-color">Player 2 Color:</label>
-                    <input type="color" id="player2-color" value="#b26a22">
+                <div class="player-selection">
+                    <div class="symbol-selection">
+                        <label for="player2-symbol">Player 2 Symbol:</label>
+                        <select id="player2-symbol">
+                            <option value="O">O</option>
+                            <option value="X">X</option>
+                        </select>
+                    </div>
+                    <div class="color-selection">
+                        <label for="player2-color">Player 2 Color:</label>
+                        <input type="color" id="player2-color" value="#b26a22">
+                    </div>
                 </div>
 
                 <button id="start-game">Start Game</button>
@@ -46,8 +50,8 @@
         <div id="game-screen" class="game-screen" style="display: none;">
             <div class="tools">
                 <div class="symbols">
-                    <span class="material-symbols-outlined">close</span>
-                    <span class="material-symbols-outlined">circle</span>
+                    <span class="material-symbols-outlined" id="player1-symbol-display">close</span>
+                    <span class="material-symbols-outlined" id="player2-symbol-display">circle</span>
                 </div>
                 <div class="reset">
                     <div class="button">

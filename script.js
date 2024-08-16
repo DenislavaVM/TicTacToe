@@ -51,11 +51,8 @@ function startGameFromHome() {
     document.querySelector(".score2").textContent = 0;
     document.querySelector(".draw").textContent = 0;
 
-    const homeScreen = document.getElementById("home-screen");
-    const gameScreen = document.getElementById("game-screen");
-
-    homeScreen.style.display = "none";
-    gameScreen.style.display = "block";
+    document.getElementById("home-screen").style.display = "none";
+    document.getElementById("game-screen").style.display = "block";
 
     startGame();
 }
@@ -80,12 +77,12 @@ function startGame() {
     startingBoard = Array.from(Array(9).keys());
     currentPlayer = playerSymbol; 
     updateSymbolColors();
-    for (let i = 0; i < cells.length; i++) {
-        cells[i].textContent = "";
-        cells[i].style.removeProperty("background-color");
-        cells[i].classList.remove("win");
-        cells[i].addEventListener("click", handleTurnClick, false);
-    }
+    cells.forEach((cell, index) => {
+        cell.textContent = "";
+        cell.style.removeProperty("background-color");
+        cell.classList.remove("win");
+        cell.addEventListener("click", handleTurnClick, false);
+    });
 }
 
 function goToHomeScreen() {
@@ -102,18 +99,19 @@ function goToHomeScreen() {
 
 function resetBoard() {
     startingBoard = Array.from(Array(9).keys());
-    for (let i = 0; i < cells.length; i++) {
-        cells[i].textContent = "";
-        cells[i].style.removeProperty("background-color");
-        cells[i].classList.remove("win");
-        cells[i].removeEventListener("click", handleTurnClick, false);
-    }
+    cells.forEach((cell) => {
+        cell.textContent = "";
+        cell.style.removeProperty("background-color");
+        cell.classList.remove("win");
+        cell.removeEventListener("click", handleTurnClick, false);
+    });
     currentPlayer = playerSymbol;
 }
 
-function handleTurnClick(square) {
-    if (typeof startingBoard[square.target.id] == "number") {
-        turn(square.target.id, currentPlayer);
+function handleTurnClick(event) {
+    const squareId = event.target.id;
+    if (typeof startingBoard[squareId] === "number") {
+        turn(squareId, currentPlayer);
         if (!checkWin(startingBoard, currentPlayer) && !checkTie()) {
             currentPlayer = currentPlayer === playerSymbol ? computerSymbol : playerSymbol;
             updateSymbolColors();
@@ -131,8 +129,9 @@ function handleTurnClick(square) {
 function turn(squareId, currentPlayer) {
     startingBoard[squareId] = currentPlayer;
     let symbolNode = createHTMLElementFromString(getSymbolHTML(currentPlayer));
-    document.getElementById(squareId).innerHTML = "";
-    document.getElementById(squareId).appendChild(symbolNode);
+    const cell = document.getElementById(squareId);
+    cell.innerHTML = "";
+    cell.appendChild(symbolNode);
 
     document.getElementById("move-sound").play();
 
@@ -146,11 +145,9 @@ function getSymbolHTML(currentPlayer) {
     const player1Color = document.getElementById("player1-color").value;
     const player2Color = document.getElementById("player2-color").value;
 
-    if (currentPlayer === playerSymbol) {
-        return `<span class="material-symbols-outlined" style="font-size: 3rem; color: ${player1Color};">${playerSymbol === "X" ? "close" : "circle"}</span>`;
-    } else {
-        return `<span class="material-symbols-outlined" style="font-size: 3rem; color: ${player2Color};">${computerSymbol === "X" ? "close" : "circle"}</span>`;
-    }
+    return `<span class="material-symbols-outlined" style="font-size: 3rem; color: ${currentPlayer === playerSymbol ? player1Color : player2Color};">
+                ${currentPlayer === playerSymbol ? playerSymbol === "X" ? "close" : "circle" : computerSymbol === "X" ? "close" : "circle"}
+            </span>`;
 }
 
 function createHTMLElementFromString(html) {
@@ -173,16 +170,16 @@ function checkWin(board, player) {
 }
 
 function gameOver(gameWon) {
-    for (let index of victoryPatterns[gameWon.index]) {
+    victoryPatterns[gameWon.index].forEach(index => {
         document.getElementById(index).classList.add("win");
-    }
-    for (let index = 0; index < cells.length; index++) {
-        cells[index].removeEventListener("click", handleTurnClick, false);
-    }
+    });
+    cells.forEach(cell => {
+        cell.removeEventListener("click", handleTurnClick, false);
+    });
 
     document.getElementById("win-sound").play();
 
-    declareWinner(gameWon.player == playerSymbol ? "You win!" : "You lose.", gameWon.player);
+    declareWinner(gameWon.player === playerSymbol ? "You win!" : "You lose.", gameWon.player);
 }
 
 function declareWinner(message, winner) {
@@ -209,13 +206,12 @@ function declareWinner(message, winner) {
         document.querySelector(".winner-announcement").style.display = "none";
     }
 
-    const endgameElement = document.querySelector(".endgame");
-    endgameElement.classList.add("show");
+    document.querySelector(".endgame").classList.add("show");
     document.querySelector(".message").classList.add("show");
 }
 
 function emptySquares(board) {
-    return board.filter(s => typeof s == "number");
+    return board.filter(s => typeof s === "number");
 }
 
 function bestSpot() {
@@ -239,11 +235,11 @@ function randomMove() {
 }
 
 function checkTie() {
-    if (emptySquares(startingBoard).length == 0) {
-        for (let index = 0; index < cells.length; index++) {
-            cells[index].style.backgroundColor = "#D3D3D3"; 
-            cells[index].removeEventListener("click", handleTurnClick, false);
-        }
+    if (emptySquares(startingBoard).length === 0) {
+        cells.forEach(cell => {
+            cell.style.backgroundColor = "#D3D3D3"; 
+            cell.removeEventListener("click", handleTurnClick, false);
+        });
 
         document.getElementById("tie-sound").play();
 
@@ -263,8 +259,7 @@ function updateSymbolColors() {
 }
 
 function closeEndgameMessage() {
-    const endgameElement = document.querySelector(".endgame");
-    endgameElement.classList.remove("show");
+    document.querySelector(".endgame").classList.remove("show");
     startGame();
 }
 
@@ -285,7 +280,7 @@ function minimax(board, player) {
         move.index = board[availSpots[i]];
         board[availSpots[i]] = player;
 
-        if (player == computerSymbol) {
+        if (player === computerSymbol) {
             let result = minimax(board, playerSymbol);
             move.score = result.score;
         } else {
