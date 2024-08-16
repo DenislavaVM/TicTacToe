@@ -1,6 +1,6 @@
 var startingBoard;
-const playerSymbol = "X";
-const computerSymbol = "O";
+let playerSymbol = "X";
+let computerSymbol = "O";
 const victoryPatterns = [
     [0, 1, 2],
     [3, 4, 5],
@@ -17,25 +17,58 @@ const resetButton = document.querySelector(".reset");
 let currentPlayer = playerSymbol; 
 let difficulty = "hard";
 
+document.getElementById("start-game").addEventListener("click", startGameFromHome);
+document.getElementById("back-home-button").addEventListener("click", goToHomeScreen);
 resetButton.addEventListener("click", startGame);
 
-startGame();
+window.onload = function() {
+    document.querySelector(".endgame").style.display = "none";
+    document.querySelector(".winner-announcement").style.display = "none";
+    document.querySelector(".message-text").textContent = "";
+    document.querySelector(".winner-symbol").textContent = "";
+}
+
+function startGameFromHome() {
+    const player1Symbol = document.getElementById("player1-symbol").value;
+    const player2Symbol = document.getElementById("player2-symbol").value;
+
+    if (player1Symbol === player2Symbol) {
+        alert("Players cannot have the same symbol. Please choose different symbols.");
+        return;
+    }
+
+    playerSymbol = player1Symbol;
+    computerSymbol = player2Symbol;
+
+    document.querySelector(".symbols .material-symbols-outlined:nth-child(1)").textContent = player1Symbol === "X" ? "close" : "circle";
+    document.querySelector(".symbols .material-symbols-outlined:nth-child(2)").textContent = player2Symbol === "X" ? "close" : "circle";
+
+    const homeScreen = document.getElementById("home-screen");
+    const gameScreen = document.getElementById("game-screen");
+
+    homeScreen.style.display = "none";
+    gameScreen.style.display = "block";
+
+    startGame();
+}
 
 function startGame() {
     const difficultySelect = document.getElementById("difficulty");
     difficulty = difficultySelect.value;
 
-    // Retrieve scores from localStorage
-    let player1Score = localStorage.getItem('player1Score') || 0;
-    let player2Score = localStorage.getItem('player2Score') || 0;
-    let draws = localStorage.getItem('draws') || 0;
+    let player1Score = localStorage.getItem("player1Score") || 0;
+    let player2Score = localStorage.getItem("player2Score") || 0;
+    let draws = localStorage.getItem("draws") || 0;
 
-    // Update the UI with the retrieved scores
-    document.querySelector('.score1').textContent = player1Score;
-    document.querySelector('.score2').textContent = player2Score;
-    document.querySelector('.draw').textContent = draws;
+    document.querySelector(".score1").textContent = player1Score;
+    document.querySelector(".score2").textContent = player2Score;
+    document.querySelector(".draw").textContent = draws;
 
     document.querySelector(".endgame").style.display = "none";
+    document.querySelector(".winner-announcement").style.display = "none";
+    document.querySelector(".message-text").textContent = "";
+    document.querySelector(".winner-symbol").textContent = "";
+
     startingBoard = Array.from(Array(9).keys());
     currentPlayer = playerSymbol; 
     updateSymbolColors();
@@ -44,6 +77,28 @@ function startGame() {
         cells[i].style.removeProperty("background-color");
         cells[i].addEventListener("click", handleTurnClick, false);
     }
+}
+
+function goToHomeScreen() {
+    document.getElementById("game-screen").style.display = "none";
+    document.getElementById("home-screen").style.display = "flex";
+
+    document.querySelector(".endgame").style.display = "none";
+    document.querySelector(".winner-announcement").style.display = "none";
+    document.querySelector(".message-text").textContent = "";
+    document.querySelector(".winner-symbol").textContent = "";
+
+    resetBoard();
+}
+
+function resetBoard() {
+    startingBoard = Array.from(Array(9).keys());
+    for (let i = 0; i < cells.length; i++) {
+        cells[i].textContent = "";
+        cells[i].style.removeProperty("background-color");
+        cells[i].removeEventListener("click", handleTurnClick, false);
+    }
+    currentPlayer = playerSymbol;
 }
 
 function handleTurnClick(square) {
@@ -69,7 +124,7 @@ function turn(squareId, currentPlayer) {
     document.getElementById(squareId).innerHTML = "";
     document.getElementById(squareId).appendChild(symbolNode);
 
-    document.getElementById('move-sound').play();
+    document.getElementById("move-sound").play();
 
     let gameWon = checkWin(startingBoard, currentPlayer);
     if (gameWon) {
@@ -78,10 +133,13 @@ function turn(squareId, currentPlayer) {
 }
 
 function getSymbolHTML(currentPlayer) {
+    const player1Color = document.getElementById("player1-color").value;
+    const player2Color = document.getElementById("player2-color").value;
+
     if (currentPlayer === playerSymbol) {
-        return '<span class="material-symbols-outlined" style="font-size: 3rem; color: #B22222;">close</span>';
+        return `<span class="material-symbols-outlined" style="font-size: 3rem; color: ${player1Color};">${playerSymbol === "X" ? "close" : "circle"}</span>`;
     } else {
-        return '<span class="material-symbols-outlined" style="font-size: 3rem; color: #b26a22;">circle</span>';
+        return `<span class="material-symbols-outlined" style="font-size: 3rem; color: ${player2Color};">${computerSymbol === "X" ? "close" : "circle"}</span>`;
     }
 }
 
@@ -112,39 +170,35 @@ function gameOver(gameWon) {
         cells[index].removeEventListener("click", handleTurnClick, false);
     }
 
-    document.getElementById('win-sound').play();
+    document.getElementById("win-sound").play();
 
     declareWinner(gameWon.player == playerSymbol ? "You win!" : "You lose.", gameWon.player);
 }
 
 function declareWinner(message, winner) {
-    // Update the message text and winner symbol
-    document.querySelector('.message-text').textContent = message;
+    document.querySelector(".message-text").textContent = message;
 
-    // Update scores in localStorage
     if (winner === playerSymbol) {
-        let player1Score = parseInt(localStorage.getItem('player1Score') || 0) + 1;
-        localStorage.setItem('player1Score', player1Score);
-        document.querySelector('.score1').textContent = player1Score;
+        let player1Score = parseInt(localStorage.getItem("player1Score") || 0) + 1;
+        localStorage.setItem("player1Score", player1Score);
+        document.querySelector(".score1").textContent = player1Score;
     } else if (winner === computerSymbol) {
-        let player2Score = parseInt(localStorage.getItem('player2Score') || 0) + 1;
-        localStorage.setItem('player2Score', player2Score);
-        document.querySelector('.score2').textContent = player2Score;
+        let player2Score = parseInt(localStorage.getItem("player2Score") || 0) + 1;
+        localStorage.setItem("player2Score", player2Score);
+        document.querySelector(".score2").textContent = player2Score;
     } else {
-        let draws = parseInt(localStorage.getItem('draws') || 0) + 1;
-        localStorage.setItem('draws', draws);
-        document.querySelector('.draw').textContent = draws;
+        let draws = parseInt(localStorage.getItem("draws") || 0) + 1;
+        localStorage.setItem("draws", draws);
+        document.querySelector(".draw").textContent = draws;
     }
 
-    // If there's a winner, show the winner announcement
     if (winner) {
-        document.querySelector('.winner-symbol').textContent = winner;
-        document.querySelector('.winner-announcement').style.display = 'block';
+        document.querySelector(".winner-symbol").textContent = winner;
+        document.querySelector(".winner-announcement").style.display = "block";
     } else {
-        document.querySelector('.winner-announcement').style.display = 'none';
+        document.querySelector(".winner-announcement").style.display = "none";
     }
 
-    // Display the endgame message
     document.querySelector(".endgame").style.display = "flex";
 }
 
@@ -179,7 +233,7 @@ function checkTie() {
             cells[index].removeEventListener("click", handleTurnClick, false);
         }
 
-        document.getElementById('tie-sound').play();
+        document.getElementById("tie-sound").play();
 
         declareWinner("Tie Game", null);
         return true;
@@ -188,14 +242,12 @@ function checkTie() {
 }
 
 function updateSymbolColors() {
+    const player1Color = document.getElementById("player1-color").value;
+    const player2Color = document.getElementById("player2-color").value;
     const symbols = document.querySelectorAll(".symbols .material-symbols-outlined");
-    if (currentPlayer === playerSymbol) { 
-        symbols[0].style.color = "#B22222";
-        symbols[1].style.color = "#FFFFFF"; 
-    } else { 
-        symbols[0].style.color = "#FFFFFF"; 
-        symbols[1].style.color = "#b26a22"; 
-    }
+    
+    symbols[0].style.color = currentPlayer === playerSymbol ? player1Color : "#FFFFFF";
+    symbols[1].style.color = currentPlayer === computerSymbol ? player2Color : "#FFFFFF";
 }
 
 function closeEndgameMessage() {
