@@ -165,6 +165,24 @@ label {
     color: #B22222;
 }
 
+.result-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.message-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.winner-announcement {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+}
+
 .winner-symbol {
     font-size: 2rem;
     color: inherit;

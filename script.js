@@ -25,6 +25,16 @@ function startGame() {
     const difficultySelect = document.getElementById("difficulty");
     difficulty = difficultySelect.value;
 
+    // Retrieve scores from localStorage
+    let player1Score = localStorage.getItem('player1Score') || 0;
+    let player2Score = localStorage.getItem('player2Score') || 0;
+    let draws = localStorage.getItem('draws') || 0;
+
+    // Update the UI with the retrieved scores
+    document.querySelector('.score1').textContent = player1Score;
+    document.querySelector('.score2').textContent = player2Score;
+    document.querySelector('.draw').textContent = draws;
+
     document.querySelector(".endgame").style.display = "none";
     startingBoard = Array.from(Array(9).keys());
     currentPlayer = playerSymbol; 
@@ -108,12 +118,34 @@ function gameOver(gameWon) {
 }
 
 function declareWinner(message, winner) {
-    let resultMessage = `${message}`;
-    if (winner) {
-        resultMessage += `<br>The winner is <span class="winner-symbol">${winner}</span>`;
+    // Update the message text and winner symbol
+    document.querySelector('.message-text').textContent = message;
+
+    // Update scores in localStorage
+    if (winner === playerSymbol) {
+        let player1Score = parseInt(localStorage.getItem('player1Score') || 0) + 1;
+        localStorage.setItem('player1Score', player1Score);
+        document.querySelector('.score1').textContent = player1Score;
+    } else if (winner === computerSymbol) {
+        let player2Score = parseInt(localStorage.getItem('player2Score') || 0) + 1;
+        localStorage.setItem('player2Score', player2Score);
+        document.querySelector('.score2').textContent = player2Score;
+    } else {
+        let draws = parseInt(localStorage.getItem('draws') || 0) + 1;
+        localStorage.setItem('draws', draws);
+        document.querySelector('.draw').textContent = draws;
     }
+
+    // If there's a winner, show the winner announcement
+    if (winner) {
+        document.querySelector('.winner-symbol').textContent = winner;
+        document.querySelector('.winner-announcement').style.display = 'block';
+    } else {
+        document.querySelector('.winner-announcement').style.display = 'none';
+    }
+
+    // Display the endgame message
     document.querySelector(".endgame").style.display = "flex";
-    document.querySelector(".endgame .content").innerHTML = resultMessage;
 }
 
 function emptySquares(board) {
