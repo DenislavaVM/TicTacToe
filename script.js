@@ -58,6 +58,9 @@ function turn(squareId, currentPlayer) {
     let symbolNode = createHTMLElementFromString(getSymbolHTML(currentPlayer));
     document.getElementById(squareId).innerHTML = "";
     document.getElementById(squareId).appendChild(symbolNode);
+
+    document.getElementById('move-sound').play();
+
     let gameWon = checkWin(startingBoard, currentPlayer);
     if (gameWon) {
         gameOver(gameWon);
@@ -98,6 +101,9 @@ function gameOver(gameWon) {
     for (let index = 0; index < cells.length; index++) {
         cells[index].removeEventListener("click", handleTurnClick, false);
     }
+
+    document.getElementById('win-sound').play();
+
     declareWinner(gameWon.player == playerSymbol ? "You win!" : "You lose.", gameWon.player);
 }
 
@@ -140,6 +146,9 @@ function checkTie() {
             cells[index].style.backgroundColor = "#D3D3D3"; 
             cells[index].removeEventListener("click", handleTurnClick, false);
         }
+
+        document.getElementById('tie-sound').play();
+
         declareWinner("Tie Game", null);
         return true;
     }
