@@ -43,6 +43,14 @@ function startGameFromHome() {
     document.querySelector(".symbols .material-symbols-outlined:nth-child(1)").textContent = player1Symbol === "X" ? "close" : "circle";
     document.querySelector(".symbols .material-symbols-outlined:nth-child(2)").textContent = player2Symbol === "X" ? "close" : "circle";
 
+    localStorage.setItem("player1Score", 0);
+    localStorage.setItem("player2Score", 0);
+    localStorage.setItem("draws", 0);
+
+    document.querySelector(".score1").textContent = 0;
+    document.querySelector(".score2").textContent = 0;
+    document.querySelector(".draw").textContent = 0;
+
     const homeScreen = document.getElementById("home-screen");
     const gameScreen = document.getElementById("game-screen");
 
