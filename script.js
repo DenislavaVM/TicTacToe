@@ -64,7 +64,7 @@ function startGame() {
     document.querySelector(".score2").textContent = player2Score;
     document.querySelector(".draw").textContent = draws;
 
-    document.querySelector(".endgame").style.display = "none";
+    document.querySelector(".endgame").classList.remove("show");
     document.querySelector(".winner-announcement").style.display = "none";
     document.querySelector(".message-text").textContent = "";
     document.querySelector(".winner-symbol").textContent = "";
@@ -75,6 +75,7 @@ function startGame() {
     for (let i = 0; i < cells.length; i++) {
         cells[i].textContent = "";
         cells[i].style.removeProperty("background-color");
+        cells[i].classList.remove("win");
         cells[i].addEventListener("click", handleTurnClick, false);
     }
 }
@@ -96,6 +97,7 @@ function resetBoard() {
     for (let i = 0; i < cells.length; i++) {
         cells[i].textContent = "";
         cells[i].style.removeProperty("background-color");
+        cells[i].classList.remove("win");
         cells[i].removeEventListener("click", handleTurnClick, false);
     }
     currentPlayer = playerSymbol;
@@ -164,7 +166,7 @@ function checkWin(board, player) {
 
 function gameOver(gameWon) {
     for (let index of victoryPatterns[gameWon.index]) {
-        document.getElementById(index).style.backgroundColor = gameWon.player == playerSymbol ? "#f8dbdb" : "#b26a22";
+        document.getElementById(index).classList.add("win");
     }
     for (let index = 0; index < cells.length; index++) {
         cells[index].removeEventListener("click", handleTurnClick, false);
@@ -199,7 +201,9 @@ function declareWinner(message, winner) {
         document.querySelector(".winner-announcement").style.display = "none";
     }
 
-    document.querySelector(".endgame").style.display = "flex";
+    const endgameElement = document.querySelector(".endgame");
+    endgameElement.classList.add("show");
+    document.querySelector(".message").classList.add("show");
 }
 
 function emptySquares(board) {
@@ -251,7 +255,8 @@ function updateSymbolColors() {
 }
 
 function closeEndgameMessage() {
-    document.querySelector(".endgame").style.display = "none";
+    const endgameElement = document.querySelector(".endgame");
+    endgameElement.classList.remove("show");
     startGame();
 }
 
