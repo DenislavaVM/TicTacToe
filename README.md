@@ -68,3 +68,15 @@ To get started with the project, follow these steps:
 If you have any questions or feedback, feel free to open an issue on [GitHub Issues](https://github.com/DenislavaVM/TicTacToe/issues).
 
 ---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
+
+## 🛠️ Technologies Used
+
+- HTML
+- CSS
+- JavaScript
+
+---
