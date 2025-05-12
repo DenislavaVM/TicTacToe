@@ -11,9 +11,9 @@
 </head>
 
 <body>
-    <div class="container">
-        <div id="home-screen" class="home-screen">
-            <h1>Welcome to Tic-Tac-Toe</h1>
+    <div class="container" role="main" aria-label="Tic Tac Toe Game">
+        <div id="home-screen" class="home-screen" role="region" aria-labelledby="home-heading">
+            <h1 id="home-heading">Welcome to Tic-Tac-Toe</h1>
             <div class="customization">
                 <div class="player-selection">
                     <div class="symbol-selection">
@@ -47,16 +47,17 @@
             </div>
         </div>
 
-        <div id="game-screen" class="game-screen" style="display: none;">
-            <div class="tools">
+        <div id="game-screen" class="game-screen" role="region" aria-labelledby="game-heading" style="display: none;">
+            <h2 id="game-heading" class="sr-only">Game Screen</h2>
+            <div class="tools" role="toolbar" aria-label="Game Controls">
                 <div class="symbols">
                     <span class="material-symbols-outlined" id="player1-symbol-display">close</span>
                     <span class="material-symbols-outlined" id="player2-symbol-display">circle</span>
                 </div>
                 <div class="reset">
-                    <div class="button">
+                    <button class="button" aria-label="Reset Game">
                         <span class="material-symbols-outlined">refresh</span>
-                    </div>
+                    </button>
                 </div>
                 <div class="difficulty-selection">
                     <label for="difficulty">Choose Difficulty:</label>
@@ -70,23 +71,23 @@
                     <button id="back-home-button">Back to Home</button>
                 </div>
             </div>
-            
-            <section class="game-board">
+
+            <section class="game-board" role="grid" aria-label="Tic Tac Toe Board">
                 <table>
                     <tr>
-                        <td class="cell" id="0"></td>
-                        <td class="cell" id="1"></td>
-                        <td class="cell" id="2"></td>
+                        <td class="cell" id="0" role="gridcell" tabindex="0"></td>
+                        <td class="cell" id="1" role="gridcell" tabindex="0"></td>
+                        <td class="cell" id="2" role="gridcell" tabindex="0"></td>
                     </tr>
                     <tr>
-                        <td class="cell" id="3"></td>
-                        <td class="cell" id="4"></td>
-                        <td class="cell" id="5"></td>
+                        <td class="cell" id="3" role="gridcell" tabindex="0"></td>
+                        <td class="cell" id="4" role="gridcell" tabindex="0"></td>
+                        <td class="cell" id="5" role="gridcell" tabindex="0"></td>
                     </tr>
                     <tr>
-                        <td class="cell" id="6"></td>
-                        <td class="cell" id="7"></td>
-                        <td class="cell" id="8"></td>
+                        <td class="cell" id="6" role="gridcell" tabindex="0"></td>
+                        <td class="cell" id="7" role="gridcell" tabindex="0"></td>
+                        <td class="cell" id="8" role="gridcell" tabindex="0"></td>
                     </tr>
                 </table>
             </section>
@@ -108,14 +109,14 @@
         </div>
     </div>
 
-    <div class="endgame">
+    <div class="endgame" role="alert">
         <div class="message">
             <div id="close" onclick="closeEndgameMessage()">
                 <span class="material-symbols-outlined">close</span>
             </div>
             <div class="content">
                 <div class="result-message">
-                    <span class="message-text"></span>
+                    <span class="message-text" aria-live="polite"></span>
                     <div class="winner-announcement">
                         The winner is <span class="winner-symbol"></span>
                     </div>

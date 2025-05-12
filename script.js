@@ -1,6 +1,9 @@
 var startingBoard;
 let playerSymbol = "X";
 let computerSymbol = "O";
+let currentPlayer = playerSymbol;
+let difficulty = "hard";
+
 const victoryPatterns = [
     [0, 1, 2],
     [3, 4, 5],
@@ -12,21 +15,31 @@ const victoryPatterns = [
     [6, 4, 2],
 ];
 
-const cells = document.querySelectorAll(".cell");
-const resetButton = document.querySelector(".reset");
-let currentPlayer = playerSymbol; 
-let difficulty = "hard";
-
 document.getElementById("start-game").addEventListener("click", startGameFromHome);
 document.getElementById("back-home-button").addEventListener("click", goToHomeScreen);
-resetButton.addEventListener("click", startGame);
 
-window.onload = function() {
+window.onload = function () {
     document.querySelector(".endgame").style.display = "none";
     document.querySelector(".winner-announcement").style.display = "none";
     document.querySelector(".message-text").textContent = "";
     document.querySelector(".winner-symbol").textContent = "";
-}
+};
+
+const cells = document.querySelectorAll(".cell");
+
+const resetButton = document.querySelector(".button");
+resetButton.addEventListener("click", startGame);
+
+function bindKeyboardToCells() {
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach(cell => {
+        cell.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                cell.click();
+            }
+        });
+    });
+};
 
 function startGameFromHome() {
     const player1Symbol = document.getElementById("player1-symbol").value;
@@ -75,7 +88,7 @@ function startGame() {
     document.querySelector(".winner-symbol").textContent = "";
 
     startingBoard = Array.from(Array(9).keys());
-    currentPlayer = playerSymbol; 
+    currentPlayer = playerSymbol;
     updateSymbolColors();
     cells.forEach((cell, index) => {
         cell.textContent = "";
@@ -83,6 +96,8 @@ function startGame() {
         cell.classList.remove("win");
         cell.addEventListener("click", handleTurnClick, false);
     });
+
+    bindKeyboardToCells();
 }
 
 function goToHomeScreen() {
@@ -237,7 +252,7 @@ function randomMove() {
 function checkTie() {
     if (emptySquares(startingBoard).length === 0) {
         cells.forEach(cell => {
-            cell.style.backgroundColor = "#D3D3D3"; 
+            cell.style.backgroundColor = "#D3D3D3";
             cell.removeEventListener("click", handleTurnClick, false);
         });
 
@@ -253,7 +268,7 @@ function updateSymbolColors() {
     const player1Color = document.getElementById("player1-color").value;
     const player2Color = document.getElementById("player2-color").value;
     const symbols = document.querySelectorAll(".symbols .material-symbols-outlined");
-    
+
     symbols[0].style.color = currentPlayer === playerSymbol ? player1Color : "#FFFFFF";
     symbols[1].style.color = currentPlayer === computerSymbol ? player2Color : "#FFFFFF";
 }
