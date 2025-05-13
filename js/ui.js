@@ -1,0 +1,82 @@
+import { createSymbolNode, getPlayerColors, victoryPatterns } from "./utils.js";
+
+export function initApp() {
+    window.onload = () => {
+        document.querySelector(".endgame").style.display = "none";
+        document.querySelector(".winner-announcement").style.display = "none";
+        document.querySelector(".message-text").textContent = "";
+        document.querySelector(".winner-symbol").textContent = "";
+    };
+
+    document.addEventListener("error", e => showErrorModal(e.detail));
+}
+
+export function updateBoardUI(board, handler) {
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach((cell, i) => {
+        cell.textContent = "";
+        cell.className = "cell";
+        cell.removeEventListener("click", handler);
+        cell.addEventListener("click", handler);
+    });
+}
+
+export function updateSymbolColors(current, p1, p2) {
+    const [p1Color, p2Color] = getPlayerColors();
+    const symbols = document.querySelectorAll(".symbols .material-symbols-outlined");
+    symbols[0].style.color = current === p1 ? p1Color : "#FFFFFF";
+    symbols[1].style.color = current === p2 ? p2Color : "#FFFFFF";
+}
+
+export function resetUIStats() {
+    document.querySelector(".score1").textContent = "0";
+    document.querySelector(".score2").textContent = "0";
+    document.querySelector(".draw").textContent = "0";
+}
+
+export function showEndgameMessage(msg, winner, mode, player, winIdx = null) {
+    const messageBox = document.querySelector(".message");
+    document.querySelector(".message-text").textContent = msg;
+
+    if (winner) {
+        const label = mode === "pvp" ? (winner === player ? "Player 1" : "Player 2") : (winner === player ? "You" : "Computer");
+        document.querySelector(".winner-symbol").textContent = `${label} (${winner})`;
+        document.querySelector(".winner-announcement").style.display = "block";
+        if (winIdx !== null) {
+            victoryPatterns[winIdx].forEach(idx => document.getElementById(idx).classList.add("win"));
+        };
+    };
+
+    if (!winner) {
+        document.querySelector(".winner-announcement").style.display = "none";
+    };
+
+    document.querySelector(".endgame").classList.add("show");
+    messageBox.classList.add("show");
+
+    updateScore(winner, player);
+};
+
+function updateScore(winner, player) {
+    if (winner === player) {
+        const val = parseInt(localStorage.getItem("player1Score") || 0) + 1;
+        localStorage.setItem("player1Score", val);
+        document.querySelector(".score1").textContent = val;
+    } else if (winner) {
+        const val = parseInt(localStorage.getItem("player2Score") || 0) + 1;
+        localStorage.setItem("player2Score", val);
+        document.querySelector(".score2").textContent = val;
+    } else {
+        const val = parseInt(localStorage.getItem("draws") || 0) + 1;
+        localStorage.setItem("draws", val);
+        document.querySelector(".draw").textContent = val;
+    };
+};
+
+export function showErrorModal(message) {
+    const modal = document.querySelector(".error-modal");
+    const errorText = modal.querySelector(".error-text");
+    errorText.textContent = message;
+    modal.classList.add("show");
+    modal.querySelector(".message").classList.add("show");
+};
