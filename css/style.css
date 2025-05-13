@@ -60,6 +60,13 @@ body {
     border-radius: 1.25rem;
 }
 
+.game-mode-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.5rem;
+}
+
 .symbol-selection,
 .color-selection {
     display: flex;

@@ -3,6 +3,7 @@ let playerSymbol = "X";
 let computerSymbol = "O";
 let currentPlayer = playerSymbol;
 let difficulty = "hard";
+let gameMode = "pvc";
 
 const victoryPatterns = [
     [0, 1, 2],
@@ -44,6 +45,7 @@ function bindKeyboardToCells() {
 function startGameFromHome() {
     const player1Symbol = document.getElementById("player1-symbol").value;
     const player2Symbol = document.getElementById("player2-symbol").value;
+    gameMode = document.getElementById("game-mode").value;
 
     if (player1Symbol === player2Symbol) {
         alert("Players cannot have the same symbol. Please choose different symbols.");
@@ -130,12 +132,14 @@ function handleTurnClick(event) {
         if (!checkWin(startingBoard, currentPlayer) && !checkTie()) {
             currentPlayer = currentPlayer === playerSymbol ? computerSymbol : playerSymbol;
             updateSymbolColors();
-            if (currentPlayer === computerSymbol) {
-                turn(bestSpot(), computerSymbol);
-                if (!checkWin(startingBoard, currentPlayer) && !checkTie()) {
-                    currentPlayer = playerSymbol;
-                    updateSymbolColors();
-                }
+            if (gameMode === "pvc" && currentPlayer === computerSymbol) {
+                setTimeout(() => {
+                    turn(bestSpot(), computerSymbol);
+                    if (!checkWin(startingBoard, currentPlayer) && !checkTie()) {
+                        currentPlayer = playerSymbol;
+                        updateSymbolColors();
+                    }
+                }, 300);
             }
         }
     }
@@ -194,11 +198,31 @@ function gameOver(gameWon) {
 
     document.getElementById("win-sound").play();
 
-    declareWinner(gameWon.player === playerSymbol ? "You win!" : "You lose.", gameWon.player);
+    let message;
+    if (gameMode === "pvp") {
+        message = `Player ${gameWon.player === playerSymbol ? "1" : "2"} wins!`;
+    } else {
+        message = gameWon.player === playerSymbol ? "You win!" : "You lose.";
+    }
+    declareWinner(message, gameWon.player);
 }
 
 function declareWinner(message, winner) {
     document.querySelector(".message-text").textContent = message;
+
+    let winnerLabel = "";
+    if (gameMode === "pvp") {
+        winnerLabel = winner === playerSymbol ? "Player 1" : "Player 2";
+    } else {
+        winnerLabel = winner === playerSymbol ? "You" : "Computer";
+    }
+
+    if (winner !== null) {
+        document.querySelector(".winner-symbol").textContent = `${winnerLabel} (${winner})`;
+        document.querySelector(".winner-announcement").style.display = "block";
+    } else {
+        document.querySelector(".winner-announcement").style.display = "none";
+    }
 
     if (winner === playerSymbol) {
         let player1Score = parseInt(localStorage.getItem("player1Score") || 0) + 1;
@@ -212,13 +236,6 @@ function declareWinner(message, winner) {
         let draws = parseInt(localStorage.getItem("draws") || 0) + 1;
         localStorage.setItem("draws", draws);
         document.querySelector(".draw").textContent = draws;
-    }
-
-    if (winner) {
-        document.querySelector(".winner-symbol").textContent = winner;
-        document.querySelector(".winner-announcement").style.display = "block";
-    } else {
-        document.querySelector(".winner-announcement").style.display = "none";
     }
 
     document.querySelector(".endgame").classList.add("show");
