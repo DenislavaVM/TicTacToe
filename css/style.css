@@ -388,9 +388,17 @@ tr {
 }
 
 @keyframes flash-draw {
-    0% { background-color: #f0f0f0; }
-    50% { background-color: #d3d3d3; }
-    100% { background-color: #f0f0f0; }
+    0% {
+        background-color: #f0f0f0;
+    }
+
+    50% {
+        background-color: #d3d3d3;
+    }
+
+    100% {
+        background-color: #f0f0f0;
+    }
 }
 
 @keyframes highlight-win {
