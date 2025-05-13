@@ -7,10 +7,18 @@ import { createSymbolNode, getPlayerColors, victoryPatterns } from "./utils.js";
 let board, currentPlayer, playerSymbol = "X", computerSymbol = "O", gameMode = "pvc", difficulty = "hard";
 const cells = document.querySelectorAll(".cell");
 
+function attachClickHandlers() {
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach(cell => {
+        cell.addEventListener("click", handleCellClick);
+    });
+};
+
 export function bindGameEvents() {
     document.getElementById("start-game").addEventListener("click", startGameFromHome);
     document.querySelector(".button").addEventListener("click", startGame);
     document.getElementById("back-home-button").addEventListener("click", goToHomeScreen);
+    attachClickHandlers();
 };
 
 function startGameFromHome() {

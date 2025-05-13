@@ -56,3 +56,9 @@ function checkWin(board, player) {
         pattern.every(index => board[index] === player)
     );
 };
+
+export function incrementLocalScore(key, selector) {
+    const val = parseInt(localStorage.getItem(key) || 0) + 1;
+    localStorage.setItem(key, val);
+    document.querySelector(selector).textContent = val;
+};

@@ -1,4 +1,4 @@
-import { createSymbolNode, getPlayerColors, victoryPatterns } from "./utils.js";
+import { createSymbolNode, getPlayerColors, victoryPatterns, incrementLocalScore } from "./utils.js";
 
 export function initApp() {
     window.onload = () => {
@@ -11,13 +11,11 @@ export function initApp() {
     document.addEventListener("error", e => showErrorModal(e.detail));
 }
 
-export function updateBoardUI(board, handler) {
+export function updateBoardUI(board) {
     const cells = document.querySelectorAll(".cell");
     cells.forEach((cell, i) => {
         cell.textContent = "";
         cell.className = "cell";
-        cell.removeEventListener("click", handler);
-        cell.addEventListener("click", handler);
     });
 }
 
@@ -59,17 +57,11 @@ export function showEndgameMessage(msg, winner, mode, player, winIdx = null) {
 
 function updateScore(winner, player) {
     if (winner === player) {
-        const val = parseInt(localStorage.getItem("player1Score") || 0) + 1;
-        localStorage.setItem("player1Score", val);
-        document.querySelector(".score1").textContent = val;
+        incrementLocalScore("player1Score", ".score1");
     } else if (winner) {
-        const val = parseInt(localStorage.getItem("player2Score") || 0) + 1;
-        localStorage.setItem("player2Score", val);
-        document.querySelector(".score2").textContent = val;
+        incrementLocalScore("player2Score", ".score2");
     } else {
-        const val = parseInt(localStorage.getItem("draws") || 0) + 1;
-        localStorage.setItem("draws", val);
-        document.querySelector(".draw").textContent = val;
+        incrementLocalScore("draws", ".draw");
     };
 };
 
