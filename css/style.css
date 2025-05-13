@@ -382,6 +382,17 @@ tr {
     animation: highlight-win 0.5s ease-in-out forwards;
 }
 
+.cell.draw-highlight {
+    background-color: #dcdcdc;
+    animation: flash-draw 0.6s ease-in-out;
+}
+
+@keyframes flash-draw {
+    0% { background-color: #f0f0f0; }
+    50% { background-color: #d3d3d3; }
+    100% { background-color: #f0f0f0; }
+}
+
 @keyframes highlight-win {
     from {
         background-color: transparent;

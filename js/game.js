@@ -1,5 +1,6 @@
 import { updateBoardUI, updateSymbolColors, showEndgameMessage, resetUIStats } from "./ui.js";
 import { playMoveSound, playWinSound, playTieSound } from "./sounds.js";
+import { highlightDrawBoard } from "./ui.js";
 import { getBestMove } from "./ai.js";
 import { createSymbolNode, getPlayerColors, victoryPatterns } from "./utils.js";
 
@@ -95,6 +96,7 @@ function checkWinner(b, player) {
 
 function checkTie() {
     if (board.every(cell => typeof cell !== "number")) {
+        highlightDrawBoard();
         playTieSound();
         showEndgameMessage("Tie Game", null, gameMode, playerSymbol);
         return true;

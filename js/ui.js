@@ -80,3 +80,10 @@ export function showErrorModal(message) {
     modal.classList.add("show");
     modal.querySelector(".message").classList.add("show");
 };
+
+export function highlightDrawBoard() {
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach(cell => {
+        cell.classList.add("draw-highlight");
+    });
+};
