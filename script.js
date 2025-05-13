@@ -48,7 +48,7 @@ function startGameFromHome() {
     gameMode = document.getElementById("game-mode").value;
 
     if (player1Symbol === player2Symbol) {
-        alert("Players cannot have the same symbol. Please choose different symbols.");
+        showErrorModal("Players cannot have the same symbol. Please choose different symbols.");
         return;
     }
 
@@ -344,4 +344,22 @@ function minimax(board, player) {
     }
 
     return moves[bestMove];
+}
+
+function showErrorModal(message) {
+    const modal = document.querySelector(".error-modal");
+    const messageBox = modal.querySelector(".message");
+    const errorText = modal.querySelector(".error-text");
+
+    errorText.textContent = message;
+    modal.classList.add("show");
+    messageBox.classList.add("show");
+}
+
+function closeErrorModal() {
+    const modal = document.querySelector(".error-modal");
+    const messageBox = modal.querySelector(".message");
+
+    modal.classList.remove("show");
+    messageBox.classList.remove("show");
 }

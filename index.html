@@ -62,7 +62,7 @@
                     <span class="material-symbols-outlined" id="player2-symbol-display">circle</span>
                 </div>
                 <div class="reset">
-                    <button class="button" aria-label="Reset Game">
+                    <button class="button" aria-label="Reset Game" title="Reset the game board">
                         <span class="material-symbols-outlined">refresh</span>
                     </button>
                 </div>
@@ -131,6 +131,18 @@
                         The winner is <span class="winner-symbol"></span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="error-modal" role="dialog" aria-labelledby="error-title" aria-describedby="error-desc">
+        <div class="message">
+            <div id="error-close" onclick="closeErrorModal()" aria-label="Close error message">
+                <span class="material-symbols-outlined">close</span>
+            </div>
+            <div class="content">
+                <p id="error-title" class="sr-only">Error</p>
+                <p id="error-desc" class="error-text">[message]</p>
             </div>
         </div>
     </div>
