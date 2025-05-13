@@ -73,21 +73,24 @@
             </div>
 
             <section class="game-board" role="grid" aria-label="Tic Tac Toe Board">
-                <table>
+                <table role="presentation" aria-describedby="board-description">
+                    <caption id="board-description" class="sr-only">
+                        Use arrow keys or tab to move between cells and enter to make a move.
+                    </caption>
                     <tr>
-                        <td class="cell" id="0" role="gridcell" tabindex="0"></td>
-                        <td class="cell" id="1" role="gridcell" tabindex="0"></td>
-                        <td class="cell" id="2" role="gridcell" tabindex="0"></td>
+                        <td><button class="cell" id="0" aria-label="Cell 1"></button></td>
+                        <td><button class="cell" id="1" aria-label="Cell 2"></button></td>
+                        <td><button class="cell" id="2" aria-label="Cell 3"></button></td>
                     </tr>
                     <tr>
-                        <td class="cell" id="3" role="gridcell" tabindex="0"></td>
-                        <td class="cell" id="4" role="gridcell" tabindex="0"></td>
-                        <td class="cell" id="5" role="gridcell" tabindex="0"></td>
+                        <td><button class="cell" id="3" aria-label="Cell 4"></button></td>
+                        <td><button class="cell" id="4" aria-label="Cell 5"></button></td>
+                        <td><button class="cell" id="5" aria-label="Cell 6"></button></td>
                     </tr>
                     <tr>
-                        <td class="cell" id="6" role="gridcell" tabindex="0"></td>
-                        <td class="cell" id="7" role="gridcell" tabindex="0"></td>
-                        <td class="cell" id="8" role="gridcell" tabindex="0"></td>
+                        <td><button class="cell" id="6" aria-label="Cell 7"></button></td>
+                        <td><button class="cell" id="7" aria-label="Cell 8"></button></td>
+                        <td><button class="cell" id="8" aria-label="Cell 9"></button></td>
                     </tr>
                 </table>
             </section>
@@ -115,8 +118,8 @@
                 <span class="material-symbols-outlined">close</span>
             </div>
             <div class="content">
-                <div class="result-message">
-                    <span class="message-text" aria-live="polite"></span>
+                <div class="result-message" aria-live="assertive">
+                    <span class="message-text" aria-live="assertive"></span>
                     <div class="winner-announcement">
                         The winner is <span class="winner-symbol"></span>
                     </div>

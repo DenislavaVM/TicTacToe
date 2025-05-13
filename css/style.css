@@ -217,6 +217,11 @@ tr {
     animation: place-symbol 0.3s ease-in-out;
 }
 
+.cell:focus {
+    outline: 3px solid #B22222;
+    outline-offset: 2px;
+}
+
 @keyframes place-symbol {
     from {
         transform: scale(0);
