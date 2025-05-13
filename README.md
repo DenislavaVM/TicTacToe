@@ -48,10 +48,10 @@ To get started with the project, follow these steps:
 ## 📷 Screenshots
 
 ### Home Screen
-![Game Screenshot](images/screenshot.png)
+![Game Screenshot](assets/images/screenshot.png)
 
 ### Gameplay
-![Game Screenshot](images/screenshot1.png)
+![Game Screenshot](assets/images/screenshot1.png)
 
 ---
 
