@@ -6,6 +6,14 @@ export function initApp() {
         document.querySelector(".winner-announcement").style.display = "none";
         document.querySelector(".message-text").textContent = "";
         document.querySelector(".winner-symbol").textContent = "";
+
+        const preloadSound = (path) => {
+            const a = new Audio(path);
+            a.preload = "auto";
+        };
+        preloadSound("assets/sounds/Player-Moves.mp3");
+        preloadSound("assets/sounds/Winning-Game.mp3");
+        preloadSound("assets/sounds/Tie-Game.mp3");
     };
 
     document.addEventListener("error", e => showErrorModal(e.detail));

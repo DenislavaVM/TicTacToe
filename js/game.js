@@ -1,7 +1,6 @@
 import { updateBoardUI, updateSymbolColors, showEndgameMessage, resetUIStats } from "./ui.js";
 import { playMoveSound, playWinSound, playTieSound } from "./sounds.js";
 import { highlightDrawBoard } from "./ui.js";
-import { getBestMove } from "./ai.js";
 import { createSymbolNode, getPlayerColors, victoryPatterns } from "./utils.js";
 
 let board, currentPlayer, playerSymbol = "X", computerSymbol = "O", gameMode = "pvc", difficulty = "hard";
@@ -68,12 +67,7 @@ function handleCellClick(e) {
 
         if (gameMode === "pvc" && currentPlayer === computerSymbol) {
             setTimeout(() => {
-                const move = getBestMove(board, difficulty, computerSymbol, playerSymbol);
-                makeMove(move, computerSymbol);
-                if (!checkWinner(board, currentPlayer) && !checkTie()) {
-                    currentPlayer = playerSymbol;
-                    updateSymbolColors(currentPlayer, playerSymbol, computerSymbol);
-                }
+                handleComputerMove();
             }, 300);
         }
     }
@@ -128,4 +122,15 @@ function goToHomeScreen() {
     document.getElementById("game-screen").style.display = "none";
     document.getElementById("home-screen").style.display = "flex";
     startGame();
+};
+
+async function handleComputerMove() {
+    const { getBestMove } = await import("./ai.js");
+    const move = getBestMove(board, difficulty, computerSymbol, playerSymbol);
+    makeMove(move, computerSymbol);
+
+    if (!checkWinner(board, currentPlayer) && !checkTie()) {
+        currentPlayer = playerSymbol;
+        updateSymbolColors(currentPlayer, playerSymbol, computerSymbol);
+    };
 };

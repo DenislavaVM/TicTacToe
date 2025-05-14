@@ -1,11 +1,14 @@
 export function playMoveSound() {
-    document.getElementById("move-sound")?.play();
+    const audio = new Audio("assets/sounds/Player-Moves.mp3");
+    audio.play();
 };
 
 export function playWinSound() {
-    document.getElementById("win-sound")?.play();
+    const audio = new Audio("assets/sounds/Winning-Game.mp3");
+    audio.play();
 };
 
 export function playTieSound() {
-    document.getElementById("tie-sound")?.play();
+    const audio = new Audio("assets/sounds/Tie-Game.mp3");
+    audio.play();
 };
