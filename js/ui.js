@@ -17,6 +17,18 @@ export function initApp() {
     };
 
     document.addEventListener("error", e => showErrorModal(e.detail));
+    document.getElementById("close")?.addEventListener("click", closeEndgameMessage);
+    document.getElementById("error-close")?.addEventListener("click", closeErrorModal);
+}
+
+function closeEndgameMessage() {
+    document.querySelector(".endgame").classList.remove("show");
+    document.querySelector(".message").classList.remove("show");
+}
+
+function closeErrorModal() {
+    document.querySelector(".error-modal").classList.remove("show");
+    document.querySelector(".error-modal .message").classList.remove("show");
 }
 
 export function updateBoardUI(board) {

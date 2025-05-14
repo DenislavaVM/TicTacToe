@@ -181,3 +181,10 @@ function postMoveCleanup() {
     };
     isProcessing = false;
 };
+
+window.addEventListener("pagehide", () => {
+    if (aiWorker) {
+        aiWorker.terminate();
+        aiWorker = null;
+    }
+});
