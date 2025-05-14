@@ -4,6 +4,7 @@ import { highlightDrawBoard } from "./ui.js";
 import { createSymbolNode, getPlayerColors, victoryPatterns } from "./utils.js";
 
 let board, currentPlayer, playerSymbol = "X", computerSymbol = "O", gameMode = "pvc", difficulty = "hard";
+let aiWorker = new Worker("js/ai.worker.js");
 const cells = document.querySelectorAll(".cell");
 
 function attachClickHandlers() {
@@ -125,10 +126,36 @@ function goToHomeScreen() {
 };
 
 async function handleComputerMove() {
-    const { getBestMove } = await import("./ai.js");
-    const move = getBestMove(board, difficulty, computerSymbol, playerSymbol);
-    makeMove(move, computerSymbol);
+    if (difficulty === "easy" && Math.random() < 0.5) {
+        const available = board.filter(s => typeof s === "number");
+        const randomMove = available[Math.floor(Math.random() * available.length)];
+        makeMove(randomMove, computerSymbol);
+        postMoveCleanup();
+        return;
+    };
 
+    if (difficulty === "medium" && Math.random() < 0.2) {
+        const available = board.filter(s => typeof s === "number");
+        const randomMove = available[Math.floor(Math.random() * available.length)];
+        makeMove(randomMove, computerSymbol);
+        postMoveCleanup();
+        return;
+    };
+
+    aiWorker.postMessage({
+        board,
+        computer: computerSymbol,
+        player: playerSymbol
+    });
+
+    aiWorker.onmessage = function (e) {
+        const move = e.data;
+        makeMove(move, computerSymbol);
+        postMoveCleanup();
+    };
+};
+
+function postMoveCleanup() {
     if (!checkWinner(board, currentPlayer) && !checkTie()) {
         currentPlayer = playerSymbol;
         updateSymbolColors(currentPlayer, playerSymbol, computerSymbol);
