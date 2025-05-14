@@ -4,7 +4,8 @@ import { highlightDrawBoard } from "./ui.js";
 import { createSymbolNode, getPlayerColors, victoryPatterns } from "./utils.js";
 
 let board, currentPlayer, playerSymbol = "X", computerSymbol = "O", gameMode = "pvc", difficulty = "hard";
-let aiWorker = new Worker("js/ai.worker.js");
+let aiWorker = null;
+let isProcessing = false;
 const cells = document.querySelectorAll(".cell");
 
 function attachClickHandlers() {
@@ -32,6 +33,15 @@ function startGameFromHome() {
     playerSymbol = p1;
     computerSymbol = p2;
 
+    if (gameMode === "pvc" && !aiWorker) {
+        aiWorker = new Worker("js/ai.worker.js");
+    };
+
+    if (gameMode === "pvp" && aiWorker) {
+        aiWorker.terminate();
+        aiWorker = null;
+    };
+
     document.querySelector(".symbols span:nth-child(1)").textContent = p1 === "X" ? "close" : "circle";
     document.querySelector(".symbols span:nth-child(2)").textContent = p2 === "X" ? "close" : "circle";
 
@@ -56,11 +66,16 @@ function startGame() {
 };
 
 function handleCellClick(e) {
+    if (isProcessing) {
+        return;
+    };
+
     const index = parseInt(e.target.id);
     if (typeof board[index] !== "number") {
         return;
     };
 
+    isProcessing = true;
     makeMove(index, currentPlayer);
     if (!checkWinner(board, currentPlayer) && !checkTie()) {
         currentPlayer = currentPlayer === playerSymbol ? computerSymbol : playerSymbol;
@@ -70,7 +85,11 @@ function handleCellClick(e) {
             setTimeout(() => {
                 handleComputerMove();
             }, 300);
+        } else {
+            isProcessing = false;
         }
+    } else {
+        isProcessing = false;
     }
 };
 
@@ -160,4 +179,5 @@ function postMoveCleanup() {
         currentPlayer = playerSymbol;
         updateSymbolColors(currentPlayer, playerSymbol, computerSymbol);
     };
+    isProcessing = false;
 };
