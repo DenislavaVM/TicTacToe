@@ -8,8 +8,12 @@ export function initApp() {
         document.querySelector(".winner-symbol").textContent = "";
 
         const preloadSound = (path) => {
-            const a = new Audio(path);
-            a.preload = "auto";
+            try {
+                const a = new Audio(path);
+                a.preload = "auto";
+            } catch (err) {
+                console.warn(`Failed to preload sound at ${path}:`, err);
+            };
         };
         preloadSound("assets/sounds/Player-Moves.mp3");
         preloadSound("assets/sounds/Winning-Game.mp3");

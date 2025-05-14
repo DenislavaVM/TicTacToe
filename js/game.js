@@ -1,4 +1,4 @@
-import { updateBoardUI, updateSymbolColors, showEndgameMessage, resetUIStats } from "./ui.js";
+import { updateBoardUI, updateSymbolColors, showEndgameMessage, resetUIStats, showErrorModal } from "./ui.js";
 import { playMoveSound, playWinSound, playTieSound } from "./sounds.js";
 import { highlightDrawBoard } from "./ui.js";
 import { createSymbolNode, getPlayerColors, victoryPatterns } from "./utils.js";
@@ -102,6 +102,7 @@ function makeMove(index, player) {
     requestAnimationFrame(() => {
         const cell = document.getElementById(index);
         if (!cell) {
+            console.warn(`makeMove(): No cell found with index ${index}`);
             return;
         };
 
@@ -171,16 +172,32 @@ async function handleComputerMove() {
         return;
     };
 
-    aiWorker.postMessage({
-        board,
-        computer: computerSymbol,
-        player: playerSymbol
-    });
+    try {
+        aiWorker.postMessage({
+            board,
+            computer: computerSymbol,
+            player: playerSymbol
+        });
 
-    aiWorker.onmessage = function (e) {
-        const move = e.data;
-        makeMove(move, computerSymbol);
-        postMoveCleanup();
+        aiWorker.onmessage = function (e) {
+            const move = e.data;
+            if (typeof move === "number") {
+                makeMove(move, computerSymbol);
+                postMoveCleanup();
+            } else {
+                console.warn("Invalid move received from worker:", move);
+            }
+        };
+
+        aiWorker.onerror = function (err) {
+            console.error("AI Worker Error:", err.message);
+            showErrorModal("An error occurred while calculating the move.");
+            isProcessing = false;
+        };
+    } catch (err) {
+        console.error("Failed to post message to AI worker:", err);
+        showErrorModal("AI processing failed.");
+        isProcessing = false;
     };
 };
 

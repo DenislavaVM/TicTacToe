@@ -1,14 +1,26 @@
 export function playMoveSound() {
-    const audio = new Audio("assets/sounds/Player-Moves.mp3");
-    audio.play();
+    try {
+        const audio = new Audio("assets/sounds/Player-Moves.mp3");
+        audio.play().catch(err => console.error("playMoveSound() failed:", err));
+    } catch (err) {
+        console.error("Error initializing move sound:", err);
+    }
 };
 
 export function playWinSound() {
-    const audio = new Audio("assets/sounds/Winning-Game.mp3");
-    audio.play();
+    try {
+        const audio = new Audio("assets/sounds/Winning-Game.mp3");
+        audio.play().catch(err => console.error("playWinSound() failed:", err));
+    } catch (err) {
+        console.error("Error initializing win sound:", err);
+    };
 };
 
 export function playTieSound() {
-    const audio = new Audio("assets/sounds/Tie-Game.mp3");
-    audio.play();
+    try {
+        const audio = new Audio("assets/sounds/Tie-Game.mp3");
+        audio.play().catch(err => console.error("playTieSound() failed:", err));
+    } catch (err) {
+        console.error("Error initializing tie sound:", err);
+    };
 };
