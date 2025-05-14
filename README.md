@@ -1,8 +1,27 @@
 # 🎯 Tic-Tac-Toe Game
 
+[Play the Game Now! 🚀](https://denislavavm.github.io/TicTacToe/)
+
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+![Made With JavaScript](https://img.shields.io/badge/made%20with-JavaScript-blue.svg)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+
+---
+
+## ✨ Features
+- Player vs Player and Player vs Computer
+- AI difficulty: Easy, Medium, Hard (Minimax)
+- Customizable symbols and colors
+- Sound effects and animations
+- Keyboard accessibility
+- Responsive design for all devices
+
+---
+
 ## 📖 Overview
 
-This is a classic Tic-Tac-Toe game implemented using HTML, CSS, and JavaScript. It features a responsive design and customizable game settings including difficulty levels and player symbols. The game can be played against the computer or with another player.
+Tic-Tac-Toe is a timeless strategy game reimagined with modern web technologies. Built using HTML, CSS, and JavaScript, this project supports both PvP and PvC gameplay, offers rich customization, AI difficulty settings, and full keyboard accessibility.
 
 ---
 
@@ -20,28 +39,24 @@ To get started with the project, follow these steps:
     cd TicTacToe
     ```
 
-3. **Open the project in your preferred code editor**.
+3. **Start the game**:
+   Open `index.html` in your browser, or use a local server like Live Server in VSCode.
 
 ---
 
-## 🛠️ Usage
+## 🕹️ How to Play
 
-1. **Start the game**:
-   Open `index.html` in your web browser.
+1. **Customize settings** on the home screen:
+   - Game mode: PvP or PvC
+   - Player symbols: X or O
+   - Player colors
+   - AI difficulty (Easy / Medium / Hard)
 
-2. **Customize Game Settings**:
-   - Choose player symbols.
-   - Set the difficulty level for playing against the computer.
+2. **Click "Start Game"** to begin.
 
-3. **Play the Game**:
-   - Click on the cells to place your symbol.
-   - The game will automatically switch turns between the player and the computer or the other player.
+3. **Use mouse or keyboard** (arrow keys + Enter/Space) to make moves.
 
-4. **Reset the Game**:
-   - Click the "Reset" button to start a new game.
-
-5. **Go Back to Home Screen**:
-   - Click the "Back to Home" button to return to the home screen.
+4. **Click "Reset"** to restart or **"Back to Home"** to change settings.
 
 ---
 
@@ -55,11 +70,15 @@ To get started with the project, follow these steps:
 
 ---
 
-## 📂 Files
+## 💡 Technologies Used
 
-- **`index.html`**: Main HTML file for the game.
-- **`style.css`**: CSS file for styling the game.
-- **`script.js`**: JavaScript file containing the game logic.
+- **HTML5**
+- **CSS3**: Flexbox, animations, media queries
+- **JavaScript**:
+  - ES6 Modules
+  - Web Workers for non-blocking AI
+  - DOM manipulation
+  - LocalStorage for score tracking
 
 ---
 
@@ -72,11 +91,3 @@ If you have any questions or feedback, feel free to open an issue on [GitHub Iss
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
-
-## 🛠️ Technologies Used
-
-- HTML
-- CSS
-- JavaScript
-
----
