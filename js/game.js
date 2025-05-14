@@ -95,15 +95,21 @@ function handleCellClick(e) {
 
 function makeMove(index, player) {
     board[index] = player;
-    const cell = document.getElementById(index);
-    cell.innerHTML = "";
-    cell.appendChild(createSymbolNode(player, getPlayerColors(), player === playerSymbol));
-    playMoveSound();
+    requestAnimationFrame(() => {
+        const cell = document.getElementById(index);
+        if (!cell) {
+            return;
+        };
 
-    const win = checkWinner(board, player);
-    if (win) {
-        endGame(win, player);
-    };
+        cell.innerHTML = "";
+        cell.appendChild(createSymbolNode(player, getPlayerColors(), player === playerSymbol));
+        playMoveSound();
+
+        const win = checkWinner(board, player);
+        if (win) {
+            endGame(win, player);
+        };
+    });
 };
 
 function checkWinner(b, player) {
