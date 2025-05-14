@@ -1,23 +1,23 @@
 import { createSymbolNode, getPlayerColors, victoryPatterns, incrementLocalScore } from "./utils.js";
 
 export function initApp() {
-    window.onload = () => {
-        document.querySelector(".winner-announcement").style.display = "none";
-        document.querySelector(".message-text").textContent = "";
-        document.querySelector(".winner-symbol").textContent = "";
+    document.querySelector(".endgame")?.classList.remove("show");
+    document.querySelector(".message")?.classList.remove("show");
+    document.querySelector(".winner-announcement").style.display = "none";
+    document.querySelector(".message-text").textContent = "";
+    document.querySelector(".winner-symbol").textContent = "";
 
-        const preloadSound = (path) => {
-            try {
-                const a = new Audio(path);
-                a.preload = "auto";
-            } catch (err) {
-                console.warn(`Failed to preload sound at ${path}:`, err);
-            };
+    const preloadSound = (path) => {
+        try {
+            const a = new Audio(path);
+            a.preload = "auto";
+        } catch (err) {
+            console.warn(`Failed to preload sound at ${path}:`, err);
         };
-        preloadSound("assets/sounds/Player-Moves.mp3");
-        preloadSound("assets/sounds/Winning-Game.mp3");
-        preloadSound("assets/sounds/Tie-Game.mp3");
     };
+    preloadSound("assets/sounds/Player-Moves.mp3");
+    preloadSound("assets/sounds/Winning-Game.mp3");
+    preloadSound("assets/sounds/Tie-Game.mp3");
 
     document.addEventListener("error", e => showErrorModal(e.detail));
     document.getElementById("close")?.addEventListener("click", closeEndgameMessage);
