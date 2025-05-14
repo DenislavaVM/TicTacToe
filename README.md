@@ -2,10 +2,10 @@
 
 [Play the Game Now! 🚀](https://denislavavm.github.io/TicTacToe/)
 
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Status](https://img.shields.io/badge/status-active-brightgreen)
-![Made With JavaScript](https://img.shields.io/badge/made%20with-JavaScript-blue.svg)
-![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)(./LICENSE.txt)
+![Status](https://img.shields.io/badge/status-active-brightgreen)(https://github.com/DenislavaVM/TicTacToe)
+![Made With JavaScript](https://img.shields.io/badge/made%20with-JavaScript-blue.svg)(https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)(https://github.com/DenislavaVM/TicTacToe/pulls)
 
 ---
 
