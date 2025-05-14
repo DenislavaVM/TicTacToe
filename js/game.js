@@ -22,6 +22,7 @@ export function bindGameEvents() {
     document.addEventListener("play-again", () => {
         startGame();
     });
+    document.addEventListener("keydown", handleArrowKeys);
     attachClickHandlers();
 };
 
@@ -189,6 +190,47 @@ function postMoveCleanup() {
         updateSymbolColors(currentPlayer, playerSymbol, computerSymbol);
     };
     isProcessing = false;
+};
+
+function handleArrowKeys(e) {
+    const focused = document.activeElement;
+    if (!focused.classList.contains("cell")) {
+        return;
+    };
+
+    const id = parseInt(focused.id);
+    if (isNaN(id)) {
+        return;
+    };
+
+    const row = Math.floor(id / 3);
+    const col = id % 3;
+
+    let targetId;
+
+    switch (e.key) {
+        case "ArrowUp":
+            if (row > 0) targetId = id - 3;
+            break;
+        case "ArrowDown":
+            if (row < 2) targetId = id + 3;
+            break;
+        case "ArrowLeft":
+            if (col > 0) targetId = id - 1;
+            break;
+        case "ArrowRight":
+            if (col < 2) targetId = id + 1;
+            break;
+        case "Enter":
+        case " ":
+            focused.click();
+            return;
+    };
+
+    if (targetId !== undefined) {
+        document.getElementById(targetId)?.focus();
+        e.preventDefault();
+    };
 };
 
 window.addEventListener("pagehide", () => {

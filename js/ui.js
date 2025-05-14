@@ -40,6 +40,7 @@ export function updateBoardUI(board) {
     cells.forEach((cell, i) => {
         cell.textContent = "";
         cell.className = "cell";
+        cell.setAttribute("tabindex", "0");
     });
 }
 
