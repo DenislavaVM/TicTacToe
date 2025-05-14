@@ -2,7 +2,7 @@ import { createSymbolNode, getPlayerColors, victoryPatterns, incrementLocalScore
 
 export function initApp() {
     window.onload = () => {
-        document.querySelector(".endgame").style.display = "none";
+        document.querySelector(".endgame").classList.add("show");
         document.querySelector(".winner-announcement").style.display = "none";
         document.querySelector(".message-text").textContent = "";
         document.querySelector(".winner-symbol").textContent = "";
@@ -19,6 +19,10 @@ export function initApp() {
     document.addEventListener("error", e => showErrorModal(e.detail));
     document.getElementById("close")?.addEventListener("click", closeEndgameMessage);
     document.getElementById("error-close")?.addEventListener("click", closeErrorModal);
+    document.getElementById("play-again-button")?.addEventListener("click", () => {
+        closeEndgameMessage();
+        document.dispatchEvent(new Event("play-again"));
+    });
 }
 
 function closeEndgameMessage() {

@@ -19,6 +19,9 @@ export function bindGameEvents() {
     document.getElementById("start-game").addEventListener("click", startGameFromHome);
     document.querySelector(".button").addEventListener("click", startGame);
     document.getElementById("back-home-button").addEventListener("click", goToHomeScreen);
+    document.addEventListener("play-again", () => {
+        startGame();
+    });
     attachClickHandlers();
 };
 
