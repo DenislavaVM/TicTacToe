@@ -2,7 +2,6 @@ import { createSymbolNode, getPlayerColors, victoryPatterns, incrementLocalScore
 
 export function initApp() {
     window.onload = () => {
-        document.querySelector(".endgame").classList.add("show");
         document.querySelector(".winner-announcement").style.display = "none";
         document.querySelector(".message-text").textContent = "";
         document.querySelector(".winner-symbol").textContent = "";
