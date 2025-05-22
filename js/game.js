@@ -67,6 +67,7 @@ function startGame() {
 
     updateSymbolColors(currentPlayer, playerSymbol, computerSymbol);
     updateBoardUI(board, handleCellClick);
+    attachClickHandlers();
 };
 
 function handleCellClick(e) {
