@@ -260,6 +260,7 @@ tr {
     font-size: clamp(28px, 8vw, 56px);
     animation: place-symbol 0.3s ease-in-out;
     margin: 0.25rem;
+    min-width: 70px;
 }
 
 .cell:focus {
