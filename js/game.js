@@ -1,16 +1,15 @@
-import { updateBoardUI, updateSymbolColors, showEndgameMessage, resetUIStats, showErrorModal } from "./ui.js";
+import { updateBoardUI, updateSymbolColors, showEndgameMessage, resetUIStats, showErrorModal, highlightDrawBoard } from "./ui.js";
 import { playMoveSound, playWinSound, playTieSound } from "./sounds.js";
-import { highlightDrawBoard } from "./ui.js";
 import { createSymbolNode, getPlayerColors, victoryPatterns } from "./utils.js";
 
 let board, currentPlayer, playerSymbol = "X", computerSymbol = "O", gameMode = "pvc", difficulty = "hard";
 let aiWorker = null;
 let isProcessing = false;
-const cells = document.querySelectorAll(".cell");
 
 function attachClickHandlers() {
     const cells = document.querySelectorAll(".cell");
     cells.forEach(cell => {
+        cell.removeEventListener("click", handleCellClick);
         cell.addEventListener("click", handleCellClick);
     });
 };
@@ -23,7 +22,6 @@ export function bindGameEvents() {
         startGame();
     });
     document.addEventListener("keydown", handleArrowKeys);
-    attachClickHandlers();
 };
 
 function startGameFromHome() {
@@ -38,7 +36,29 @@ function startGameFromHome() {
     computerSymbol = p2;
 
     if (gameMode === "pvc" && !aiWorker) {
-        aiWorker = new Worker("js/ai.worker.js");
+        aiWorker = new Worker(new URL("./ai.worker.js", import.meta.url), { type: "module" });
+
+        aiWorker.onmessage = (e) => {
+            const payload = e.data;
+            if (typeof payload === "number") {
+                makeMove(payload, computerSymbol);
+                postMoveCleanup();
+            } else if (payload && payload.error) {
+                console.error("AI Worker Error (payload):", payload.error);
+                showErrorModal("AI error: " + payload.error);
+                isProcessing = false;
+            } else {
+                console.warn("Invalid move received from worker:", payload);
+                showErrorModal("AI returned an invalid response.");
+                isProcessing = false;
+            }
+        };
+
+        aiWorker.onerror = (err) => {
+            console.error("AI Worker Error:", err.message || err);
+            showErrorModal("An error occurred while calculating the move.");
+            isProcessing = false;
+        };
     };
 
     if (gameMode === "pvp" && aiWorker) {
@@ -66,7 +86,7 @@ function startGame() {
     currentPlayer = playerSymbol;
 
     updateSymbolColors(currentPlayer, playerSymbol, computerSymbol);
-    updateBoardUI(board, handleCellClick);
+    updateBoardUI(board);
     attachClickHandlers();
 };
 
@@ -75,7 +95,7 @@ function handleCellClick(e) {
         return;
     };
 
-    const index = parseInt(e.target.id);
+    const index = parseInt(e.currentTarget.id, 10);
     if (typeof board[index] !== "number") {
         return;
     };
@@ -133,6 +153,12 @@ function checkTie() {
         highlightDrawBoard();
         playTieSound();
         showEndgameMessage("Tie Game", null, gameMode, playerSymbol);
+
+        document.querySelectorAll(".cell").forEach(cell => {
+            cell.removeEventListener("click", handleCellClick);
+            cell.disabled = true;
+        });
+
         return true;
     };
     return false;
@@ -147,7 +173,10 @@ function endGame(win, winner) {
         playerSymbol,
         win.index
     );
-    cells.forEach(cell => cell.removeEventListener("click", handleCellClick));
+    document.querySelectorAll(".cell").forEach(cell => {
+        cell.removeEventListener("click", handleCellClick);
+        cell.disabled = true;
+    });
 };
 
 function goToHomeScreen() {
@@ -173,28 +202,21 @@ async function handleComputerMove() {
         return;
     };
 
+    if (!aiWorker) {
+        console.warn("AI worker is not available; falling back to random move.");
+        const available = board.filter(s => typeof s === "number");
+        const randomMove = available[Math.floor(Math.random() * available.length)];
+        makeMove(randomMove, computerSymbol);
+        postMoveCleanup();
+        return;
+    };
+
     try {
         aiWorker.postMessage({
             board,
             computer: computerSymbol,
             player: playerSymbol
         });
-
-        aiWorker.onmessage = function (e) {
-            const move = e.data;
-            if (typeof move === "number") {
-                makeMove(move, computerSymbol);
-                postMoveCleanup();
-            } else {
-                console.warn("Invalid move received from worker:", move);
-            }
-        };
-
-        aiWorker.onerror = function (err) {
-            console.error("AI Worker Error:", err.message);
-            showErrorModal("An error occurred while calculating the move.");
-            isProcessing = false;
-        };
     } catch (err) {
         console.error("Failed to post message to AI worker:", err);
         showErrorModal("AI processing failed.");

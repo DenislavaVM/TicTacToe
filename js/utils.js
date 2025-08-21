@@ -44,10 +44,7 @@ export function minimax(newBoard, player, opponent) {
         moves.push(move);
     };
 
-    const bestMove = player === opponent
-        ? moves.reduce((acc, m) => (m.score < acc.score ? m : acc), { score: 1000 })
-        : moves.reduce((acc, m) => (m.score > acc.score ? m : acc), { score: -1000 });
-
+    const bestMove = moves.reduce((acc, m) => (m.score > acc.score ? m : acc), { score: -1000 });
     return bestMove;
 };
 

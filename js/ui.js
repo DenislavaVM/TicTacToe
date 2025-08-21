@@ -1,5 +1,9 @@
 import { createSymbolNode, getPlayerColors, victoryPatterns, incrementLocalScore } from "./utils.js";
 
+let lastFocusedElement = null;
+let removeEndgameTrap = null;
+let endgameEscHandler = null;
+
 export function initApp() {
     document.querySelector(".endgame")?.classList.remove("show");
     document.querySelector(".message")?.classList.remove("show");
@@ -28,58 +32,137 @@ export function initApp() {
     });
 }
 
-function closeEndgameMessage() {
-    document.querySelector(".endgame").classList.remove("show");
-    document.querySelector(".message").classList.remove("show");
-}
+export function closeEndgameMessage() {
+    const overlay = document.querySelector(".endgame");
+    const dialog = overlay.querySelector(".message");
+
+    overlay.classList.remove("show");
+    dialog.classList.remove("show");
+
+    document.body.style.overflow = "";
+    if (removeEndgameTrap) {
+        removeEndgameTrap();
+        removeEndgameTrap = null;
+    };
+
+    if (endgameEscHandler) {
+        document.removeEventListener("keydown", endgameEscHandler);
+        endgameEscHandler = null;
+    };
+
+    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+        lastFocusedElement.focus();
+    };
+
+    lastFocusedElement = null;
+};
+
+function trapFocus(container) {
+    const focusable = container.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+
+    if (focusable.length === 0) return () => { };
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    function handleKeydown(e) {
+        if (e.key !== "Tab") {
+            return;
+        };
+
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+            return;
+        };
+
+        if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+            return;
+        };
+    };
+
+    container.addEventListener("keydown", handleKeydown);
+    return () => container.removeEventListener("keydown", handleKeydown);
+};
 
 function closeErrorModal() {
     document.querySelector(".error-modal").classList.remove("show");
     document.querySelector(".error-modal .message").classList.remove("show");
-}
+};
 
 export function updateBoardUI(board) {
     const cells = document.querySelectorAll(".cell");
-    cells.forEach((cell, i) => {
+    cells.forEach((cell) => {
         cell.textContent = "";
         cell.className = "cell";
         cell.setAttribute("tabindex", "0");
+        cell.disabled = false;
     });
-}
+};
 
 export function updateSymbolColors(current, p1, p2) {
     const [p1Color, p2Color] = getPlayerColors();
     const symbols = document.querySelectorAll(".symbols .material-symbols-outlined");
     symbols[0].style.color = current === p1 ? p1Color : "#FFFFFF";
     symbols[1].style.color = current === p2 ? p2Color : "#FFFFFF";
-}
+};
 
 export function resetUIStats() {
     document.querySelector(".score1").textContent = "0";
     document.querySelector(".score2").textContent = "0";
     document.querySelector(".draw").textContent = "0";
-}
+};
 
 export function showEndgameMessage(msg, winner, mode, player, winIdx = null) {
-    const messageBox = document.querySelector(".message");
+    const overlay = document.querySelector(".endgame");
+    const dialog = overlay.querySelector(".message");
     document.querySelector(".message-text").textContent = msg;
 
     if (winner) {
-        const label = mode === "pvp" ? (winner === player ? "Player 1" : "Player 2") : (winner === player ? "You" : "Computer");
+        const label = mode === "pvp"
+            ? (winner === player ? "Player 1" : "Player 2")
+            : (winner === player ? "You" : "Computer");
+
         document.querySelector(".winner-symbol").textContent = `${label} (${winner})`;
         document.querySelector(".winner-announcement").style.display = "block";
+
         if (winIdx !== null) {
             victoryPatterns[winIdx].forEach(idx => document.getElementById(idx).classList.add("win"));
         };
-    };
-
-    if (!winner) {
+    } else {
         document.querySelector(".winner-announcement").style.display = "none";
     };
 
-    document.querySelector(".endgame").classList.add("show");
-    messageBox.classList.add("show");
+    overlay.classList.add("show");
+    dialog.classList.add("show");
+    dialog.setAttribute("role", "dialog");
+    dialog.setAttribute("aria-modal", "true");
+    if (!dialog.getAttribute("aria-label") && !dialog.getAttribute("aria-labelledby")) {
+        dialog.setAttribute("aria-label", "Game over dialog");
+    };
 
+    lastFocusedElement = document.activeElement;
+    const playAgainBtn = document.getElementById("play-again-button");
+    (playAgainBtn || dialog).focus();
+
+    document.body.style.overflow = "hidden";
+    if (removeEndgameTrap) {
+        removeEndgameTrap();
+    };
+
+    removeEndgameTrap = trapFocus(dialog);
+
+    if (endgameEscHandler) document.removeEventListener("keydown", endgameEscHandler);
+    endgameEscHandler = (e) => {
+        if (e.key === "Escape") {
+            closeEndgameMessage();
+        }
+    };
+    document.addEventListener("keydown", endgameEscHandler);
     updateScore(winner, player);
 };
 

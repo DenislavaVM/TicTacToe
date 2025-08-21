@@ -104,6 +104,14 @@ button:hover {
     background-color: #b26a22;
 }
 
+button:focus-visible,
+select:focus-visible,
+input[type="color"]:focus-visible {
+    outline: 3px solid #FFD700;
+    outline-offset: 3px;
+    border-radius: 8px;
+}
+
 .game-screen {
     display: none;
 }
@@ -427,6 +435,10 @@ tr {
 }
 
 @media (max-width: 768px) {
+    body {
+        background-attachment: scroll;
+    }
+
     .container {
         width: 90%;
         height: auto;
@@ -536,5 +548,13 @@ tr {
 
     .message.show {
         transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none;
+        transition: none;
+        scroll-behavior: auto;
     }
 }
