@@ -1,4 +1,4 @@
-import { updateBoardUI, updateSymbolColors, showEndgameMessage, resetUIStats, showErrorModal, highlightDrawBoard } from "./ui.js";
+import { updateBoardUI, updateSymbolColors, showEndgameMessage, resetUIStats, showErrorModal, highlightDrawBoard, loadUIStats } from "./ui.js";
 import { playMoveSound, playWinSound, playTieSound } from "./sounds.js";
 import { createSymbolNode, getPlayerColors, getRandomAvailableMove, victoryPatterns } from "./utils.js";
 
@@ -23,6 +23,13 @@ export function bindGameEvents() {
         startGame();
     });
     document.addEventListener("keydown", handleArrowKeys);
+};
+
+function fallbackToRandomAI() {
+    if (aiWorker) {
+        aiWorker.terminate();
+        aiWorker = null;
+    };
 };
 
 function startGameFromHome() {
@@ -56,8 +63,9 @@ function startGameFromHome() {
         };
 
         aiWorker.onerror = (err) => {
-            console.error("AI Worker Error:", err.message || err);
-            showErrorModal("An error occurred while calculating the move.");
+            console.error("AI Worker Error:", err?.message || err);
+            showErrorModal("AI error: switching to random moves.");
+            fallbackToRandomAI();
             isProcessing = false;
         };
     };
@@ -206,8 +214,7 @@ async function handleComputerMove() {
     };
 
     if (difficulty === "medium" && Math.random() < 0.2) {
-        const available = board.filter(s => typeof s === "number");
-        const randomMove = available[Math.floor(Math.random() * available.length)];
+        const randomMove = getRandomAvailableMove(board);
         makeMove(randomMove, computerSymbol);
         postMoveCleanup();
         return;
@@ -215,8 +222,7 @@ async function handleComputerMove() {
 
     if (!aiWorker) {
         console.warn("AI worker is not available; falling back to random move.");
-        const available = board.filter(s => typeof s === "number");
-        const randomMove = available[Math.floor(Math.random() * available.length)];
+        const randomMove = getRandomAvailableMove(board);
         makeMove(randomMove, computerSymbol);
         postMoveCleanup();
         return;
