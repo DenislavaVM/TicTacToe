@@ -192,3 +192,9 @@ export function highlightDrawBoard() {
         cell.classList.add("draw-highlight");
     });
 };
+
+export function loadUIStats() {
+    document.querySelector(".score1").textContent = localStorage.getItem("player1Score") || "0";
+    document.querySelector(".score2").textContent = localStorage.getItem("player2Score") || "0";
+    document.querySelector(".draw").textContent = localStorage.getItem("draws") || "0";
+};

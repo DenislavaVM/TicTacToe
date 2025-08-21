@@ -69,15 +69,10 @@ function startGameFromHome() {
 
     document.querySelector(".symbols span:nth-child(1)").textContent = p1 === "X" ? "close" : "circle";
     document.querySelector(".symbols span:nth-child(2)").textContent = p2 === "X" ? "close" : "circle";
-
-    localStorage.setItem("player1Score", 0);
-    localStorage.setItem("player2Score", 0);
-    localStorage.setItem("draws", 0);
-
-    resetUIStats();
     document.getElementById("home-screen").style.display = "none";
     document.getElementById("game-screen").style.display = "block";
 
+    loadUIStats();
     startGame();
 };
 
@@ -185,8 +180,20 @@ function endGame(win, winner) {
 };
 
 function goToHomeScreen() {
+    const keepStats = confirm("Do you want to keep your scores?");
+    if (!keepStats) {
+        localStorage.setItem("player1Score", 0);
+        localStorage.setItem("player2Score", 0);
+        localStorage.setItem("draws", 0);
+    };
+
     document.getElementById("game-screen").style.display = "none";
     document.getElementById("home-screen").style.display = "flex";
+
+    if (!keepStats) {
+        resetUIStats();
+    };
+
     startGame();
 };
 
