@@ -187,12 +187,12 @@ input[type="color"]:focus-visible {
     color: var(--accent);
 }
 
-.reset .button {
+#reset-button {
     background: var(--bg-dark-2);
     color: var(--white);
 }
 
-.reset .button:hover {
+#reset-button:hover {
     background: var(--accent-2);
 }
 
