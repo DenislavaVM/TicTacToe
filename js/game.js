@@ -1,6 +1,6 @@
 import { updateBoardUI, updateSymbolColors, showEndgameMessage, resetUIStats, showErrorModal, highlightDrawBoard } from "./ui.js";
 import { playMoveSound, playWinSound, playTieSound } from "./sounds.js";
-import { createSymbolNode, getPlayerColors, victoryPatterns } from "./utils.js";
+import { createSymbolNode, getPlayerColors, getRandomAvailableMove, victoryPatterns } from "./utils.js";
 
 let board, currentPlayer, playerSymbol = "X", computerSymbol = "O", gameMode = "pvc", difficulty = "hard";
 let aiWorker = null;
@@ -199,8 +199,7 @@ function goToHomeScreen() {
 
 async function handleComputerMove() {
     if (difficulty === "easy" && Math.random() < 0.5) {
-        const available = board.filter(s => typeof s === "number");
-        const randomMove = available[Math.floor(Math.random() * available.length)];
+        const randomMove = getRandomAvailableMove(board);
         makeMove(randomMove, computerSymbol);
         postMoveCleanup();
         return;

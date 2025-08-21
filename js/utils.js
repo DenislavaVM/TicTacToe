@@ -24,11 +24,15 @@ export function emptySquares(board) {
     return board.filter(s => typeof s === "number");
 };
 
-export function minimax(board, player, opponent, depth = 0, isMaximizing = true, alpha = -Infinity, beta = Infinity) {
+export function minimax(board, player, opponent, depth = 0, isMaximizing = true, alpha = -Infinity, beta = Infinity, maxDepth = Infinity) {
     const availSpots = emptySquares(board);
     if (checkWin(board, opponent)) return { score: -10 + depth };
     if (checkWin(board, player)) return { score: 10 - depth };
     if (availSpots.length === 0) return { score: 0 };
+
+    if (depth >= maxDepth) {
+        return { score: 0 };
+    };
 
     let bestMove;
 
@@ -38,13 +42,13 @@ export function minimax(board, player, opponent, depth = 0, isMaximizing = true,
             const index = availSpots[i];
             board[index] = player;
 
-            const result = minimax(board, player, opponent, depth + 1, false, alpha, beta);
+            const result = minimax(board, player, opponent, depth + 1, false, alpha, beta, maxDepth);
 
             board[index] = index;
             if (result.score > maxEval) {
                 maxEval = result.score;
                 bestMove = { index, score: maxEval };
-            }
+            };
 
             alpha = Math.max(alpha, result.score);
             if (beta <= alpha) break;
@@ -56,7 +60,7 @@ export function minimax(board, player, opponent, depth = 0, isMaximizing = true,
             const index = availSpots[i];
             board[index] = opponent;
 
-            const result = minimax(board, player, opponent, depth + 1, true, alpha, beta);
+            const result = minimax(board, player, opponent, depth + 1, true, alpha, beta, maxDepth);
 
             board[index] = index;
             if (result.score < minEval) {
@@ -81,4 +85,9 @@ export function incrementLocalScore(key, selector) {
     const val = parseInt(localStorage.getItem(key) || 0) + 1;
     localStorage.setItem(key, val);
     document.querySelector(selector).textContent = val;
+};
+
+export function getRandomAvailableMove(board) {
+    const available = emptySquares(board);
+    return available[Math.floor(Math.random() * available.length)];
 };
