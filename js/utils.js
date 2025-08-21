@@ -24,28 +24,51 @@ export function emptySquares(board) {
     return board.filter(s => typeof s === "number");
 };
 
-export function minimax(newBoard, player, opponent) {
-    const availSpots = emptySquares(newBoard);
-
-    if (checkWin(newBoard, opponent)) return { score: -10 };
-    if (checkWin(newBoard, player)) return { score: 10 };
+export function minimax(board, player, opponent, depth = 0, isMaximizing = true, alpha = -Infinity, beta = Infinity) {
+    const availSpots = emptySquares(board);
+    if (checkWin(board, opponent)) return { score: -10 + depth };
+    if (checkWin(board, player)) return { score: 10 - depth };
     if (availSpots.length === 0) return { score: 0 };
 
-    let moves = [];
-    for (let i = 0; i < availSpots.length; i++) {
-        let move = {};
-        move.index = newBoard[availSpots[i]];
-        newBoard[availSpots[i]] = player;
+    let bestMove;
 
-        const result = minimax(newBoard, opponent, player);
-        move.score = result.score;
+    if (isMaximizing) {
+        let maxEval = -Infinity;
+        for (let i = 0; i < availSpots.length; i++) {
+            const index = availSpots[i];
+            board[index] = player;
 
-        newBoard[availSpots[i]] = move.index;
-        moves.push(move);
+            const result = minimax(board, player, opponent, depth + 1, false, alpha, beta);
+
+            board[index] = index;
+            if (result.score > maxEval) {
+                maxEval = result.score;
+                bestMove = { index, score: maxEval };
+            }
+
+            alpha = Math.max(alpha, result.score);
+            if (beta <= alpha) break;
+        };
+        return bestMove;
+    } else {
+        let minEval = Infinity;
+        for (let i = 0; i < availSpots.length; i++) {
+            const index = availSpots[i];
+            board[index] = opponent;
+
+            const result = minimax(board, player, opponent, depth + 1, true, alpha, beta);
+
+            board[index] = index;
+            if (result.score < minEval) {
+                minEval = result.score;
+                bestMove = { index, score: minEval };
+            };
+
+            beta = Math.min(beta, result.score);
+            if (beta <= alpha) break;
+        };
+        return bestMove;
     };
-
-    const bestMove = moves.reduce((acc, m) => (m.score > acc.score ? m : acc), { score: -1000 });
-    return bestMove;
 };
 
 function checkWin(board, player) {
