@@ -5,6 +5,7 @@ import { createSymbolNode, getPlayerColors, victoryPatterns } from "./utils.js";
 let board, currentPlayer, playerSymbol = "X", computerSymbol = "O", gameMode = "pvc", difficulty = "hard";
 let aiWorker = null;
 let isProcessing = false;
+let gameActive = false;
 
 function attachClickHandlers() {
     const cells = document.querySelectorAll(".cell");
@@ -84,7 +85,7 @@ function startGame() {
     difficulty = document.getElementById("difficulty").value;
     board = Array.from(Array(9).keys());
     currentPlayer = playerSymbol;
-
+    gameActive = true;
     updateSymbolColors(currentPlayer, playerSymbol, computerSymbol);
     updateBoardUI(board);
     attachClickHandlers();
@@ -129,6 +130,8 @@ function makeMove(index, player) {
 
         cell.innerHTML = "";
         cell.appendChild(createSymbolNode(player, getPlayerColors(), player === playerSymbol));
+        cell.disabled = true;
+        cell.setAttribute("aria-pressed", "true");
         playMoveSound();
 
         const win = checkWinner(board, player);
@@ -150,6 +153,7 @@ function checkWinner(b, player) {
 
 function checkTie() {
     if (board.every(cell => typeof cell !== "number")) {
+        gameActive = false;
         highlightDrawBoard();
         playTieSound();
         showEndgameMessage("Tie Game", null, gameMode, playerSymbol);
@@ -165,6 +169,7 @@ function checkTie() {
 };
 
 function endGame(win, winner) {
+    gameActive = false;
     playWinSound();
     showEndgameMessage(
         gameMode === "pvp" ? `Player ${winner === playerSymbol ? "1" : "2"} wins!` : winner === playerSymbol ? "You win!" : "You lose.",

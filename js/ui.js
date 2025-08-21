@@ -96,11 +96,13 @@ function closeErrorModal() {
 
 export function updateBoardUI(board) {
     const cells = document.querySelectorAll(".cell");
-    cells.forEach((cell) => {
+    cells.forEach((cell, i) => {
         cell.textContent = "";
         cell.className = "cell";
-        cell.setAttribute("tabindex", "0");
         cell.disabled = false;
+        cell.setAttribute("aria-pressed", "false");
+        cell.setAttribute("tabindex", "0");
+        cell.setAttribute("aria-label", `Cell ${i + 1}`);
     });
 };
 
